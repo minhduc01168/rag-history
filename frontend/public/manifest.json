@@ -1,0 +1,13 @@
+{
+  "name": "TerraAlert - Hệ thống Cảnh báo Thiên tai",
+  "short_name": "TerraAlert",
+  "description": "Hệ thống cảnh báo thiên tai thông minh cho vùng núi Việt Nam",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "categories": ["weather", "navigation", "utilities"],
+  "lang": "vi",
+  "dir": "ltr"
+}

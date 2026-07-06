@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - terraalert-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/terraalert
+      - CHROMA_HOST=chromadb
+    volumes:
+      - backend_chroma:/app/.chroma
+    depends_on:
+      - postgres
+#      - redis
+    networks:
+      - terraalert-network
+
+  postgres:
+    image: postgis/postgis:15-3.4-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: terraalert
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - terraalert-network
+#
+#  redis:
+#    image: redis:7-alpine
+#    ports:
+#      - "6379:6379"
+#    volumes:
+#      - redis_data:/data
+#    networks:
+#      - terraalert-network
+
+  chromadb:
+    image: chromadb/chroma:latest
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    networks:
+      - terraalert-network
+
+  embedding_service:
+    build:
+      context: ./embedding_service
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    networks:
+      - terraalert-network
+
+volumes:
+  postgres_data:
+  redis_data:
+  chroma_data:
+  backend_chroma:
+
+networks:
+  terraalert-network:
+    driver: bridge
