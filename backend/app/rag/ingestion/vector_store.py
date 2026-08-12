@@ -13,6 +13,7 @@ class CustomHTTPEmbeddingFunction(EmbeddingFunction):
     def __call__(self, input: Documents) -> Embeddings:
         n = len(input)
         print(f"[Embedding] Đang encode {n} chunks... (có thể mất vài phút với model 270M)")
+        t0 = time.time()  # Fix: định nghĩa t0 trước khối try để tránh NameError
         try:
             response = requests.post(
                 self.api_url,

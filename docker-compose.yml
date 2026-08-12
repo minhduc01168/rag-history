@@ -23,10 +23,10 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/terraalert
       - CHROMA_HOST=chromadb
-    volumes:
-      - backend_chroma:/app/.chroma
+      - CHROMA_PORT=8000
     depends_on:
       - postgres
+      - chromadb
 #      - redis
     networks:
       - terraalert-network
@@ -55,6 +55,11 @@ services:
 
   chromadb:
     image: chromadb/chroma:latest
+    environment:
+      # Bắt buộc để ChromaDB ghi dữ liệu ra đĩa thay vì lưu in-memory
+      - IS_PERSISTENT=TRUE
+      - PERSIST_DIRECTORY=/chroma/chroma
+      - ANONYMIZED_TELEMETRY=FALSE
     ports:
       - "8001:8000"
     volumes:
@@ -66,16 +71,23 @@ services:
     build:
       context: ./embedding_service
       dockerfile: Dockerfile
+    environment:
+      # Cache model HuggingFace vào volume để không tải lại mỗi lần rebuild
+      - HF_HOME=/root/.cache/huggingface
+      - TRANSFORMERS_CACHE=/root/.cache/huggingface
     ports:
       - "8002:8002"
+    volumes:
+      - hf_model_cache:/root/.cache/huggingface
     networks:
       - terraalert-network
 
 volumes:
   postgres_data:
   redis_data:
-  chroma_data:
-  backend_chroma:
+  chroma_data:        # Dữ liệu ChromaDB — KHÔNG xóa khi rebuild (chỉ mất khi down -v)
+  hf_model_cache:     # Cache model HuggingFace — tránh tải lại model mỗi lần rebuild
+  # backend_chroma đã xóa — volume này không được dùng trong Docker mode (HttpClient)
 
 networks:
   terraalert-network:
