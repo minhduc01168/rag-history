@@ -29,7 +29,7 @@ export function ChatWindow() {
           text: t('bot.welcome'),
           sender: 'bot',
           timestamp: new Date(),
-          agent: 'TerraBot',
+          agent: 'Cụ Rùa Thông Thái',
         },
       ]);
     } else if (messages[0]?.id === 'welcome') {
@@ -85,7 +85,7 @@ export function ChatWindow() {
         text: data.answer,
         sender: 'bot',
         timestamp: new Date(),
-        agent: data.route_taken === 'knowledge' ? 'TerraBot Cẩm Nang' : `TerraBot ${data.route_taken}`,
+        agent: data.route_taken === 'knowledge' ? 'Cụ Rùa SGK' : 'Cụ Rùa Thông Thái',
         sources: data.sources,
       };
 
