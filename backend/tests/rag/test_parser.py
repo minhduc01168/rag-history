@@ -24,8 +24,8 @@ def mock_gemini():
 
 def test_gemini_parser_init_without_key():
     # Xóa API key nếu có để test báo lỗi
-    if "GOOGLE_API_KEY" in os.environ:
-        del os.environ["GOOGLE_API_KEY"]
+    os.environ.pop("GEMINI_API_KEY", None)
+    os.environ.pop("GOOGLE_API_KEY", None)
     with pytest.raises(ValueError):
         GeminiDocumentParser()
 
