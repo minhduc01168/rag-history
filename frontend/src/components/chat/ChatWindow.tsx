@@ -12,7 +12,7 @@ interface Message {
   sources?: string[];
 }
 
-const API_BASE_URL = 'http://localhost:8000';
+import { API_BASE_URL } from '../../config/api';
 
 export function ChatWindow() {
   const { t } = useLanguage();
@@ -65,7 +65,7 @@ export function ChatWindow() {
 
     try {
       // Call API
-      const response = await fetch(`${API_BASE_URL}/api/v1/rag/chat`, {
+      const response = await fetch(`${API_BASE_URL}/rag/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

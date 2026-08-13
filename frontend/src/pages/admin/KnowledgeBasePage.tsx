@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
+import { API_BASE_URL } from '../../config/api';
 
 interface ChunkData {
   text: string;
@@ -36,7 +37,7 @@ export function KnowledgeBasePage() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/api/v1/admin/rag/dry-run', {
+      const response = await fetch(`${API_BASE_URL}/admin/rag/dry-run`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -64,7 +65,7 @@ export function KnowledgeBasePage() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/api/v1/admin/rag/commit', {
+      const response = await fetch(`${API_BASE_URL}/admin/rag/commit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -23,25 +23,25 @@ function HeaderAuth() {
     <div className="flex items-center gap-3 sm:gap-4">
 
       {isAuthenticated ? (
-        <div className="flex items-center gap-4">
-          <span className="text-sm font-medium text-slate-300 hidden sm:inline">
-            Xin chào, <span className="text-amber-400 font-bold">{user?.full_name}</span>
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-bold text-slate-950 hidden sm:inline">
+            Xin chào, <span className="text-amber-950 font-black underline underline-offset-2">{user?.full_name}</span>
           </span>
           <button
             onClick={handleLogout}
-            className="text-xs font-semibold text-rose-400 hover:text-rose-300 transition-colors px-3 py-1.5 rounded-xl border border-rose-500/30 hover:bg-rose-500/10"
+            className="text-xs font-bold text-rose-950 hover:bg-rose-600 hover:text-white transition-all px-3 py-1.5 rounded-xl border border-rose-900/20 bg-rose-500/20"
           >
             Đăng xuất
           </button>
         </div>
       ) : (
-        <div className="flex items-center gap-3">
-          <Link to="/login" className="text-sm font-medium text-slate-300 hover:text-white transition-colors px-2 py-1">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Link to="/login" className="text-sm font-extrabold text-slate-950 hover:bg-slate-950/10 transition-all px-3 py-1.5 rounded-xl">
             Đăng nhập
           </Link>
           <Link
             to="/register"
-            className="text-xs font-bold bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 px-4 py-2 rounded-xl shadow-md shadow-amber-500/20 hover:scale-105 active:scale-95 transition-all"
+            className="text-xs font-black bg-slate-950 hover:bg-slate-900 text-amber-300 px-4 py-2 rounded-xl shadow-md hover:scale-105 active:scale-95 transition-all"
           >
             Đăng ký học
           </Link>
@@ -63,21 +63,21 @@ function Layout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-slate-100 flex flex-col font-sans">
-      <header className="bg-slate-900/80 backdrop-blur-md border-b border-amber-500/20 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-3.5">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50/70 via-slate-50 to-amber-100/40 text-slate-800 flex flex-col font-sans">
+      <header className="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 border-b border-amber-600/20 shadow-lg shadow-amber-500/15 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-3">
           <div className="flex items-center gap-8">
             <h1 className="text-2xl font-extrabold flex items-center gap-2">
-              <span className="text-3xl animate-bounce">🐢</span>
-              <Link to="/" className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent drop-shadow-sm hover:opacity-90">
+              <span className="text-3xl animate-bounce filter drop-shadow">🐢</span>
+              <Link to="/" className="text-slate-950 font-black tracking-tight hover:opacity-90 transition-opacity drop-shadow-sm">
                 Đại Việt Kids AI
               </Link>
             </h1>
             <nav className="hidden md:flex gap-6">
               <Link
                 to="/"
-                className={`text-sm font-bold transition-all duration-200 hover:-translate-y-0.5 flex items-center gap-1.5 ${
-                  location.pathname === '/' ? 'text-amber-400 drop-shadow-md border-b-2 border-amber-400 pb-1' : 'text-slate-300 hover:text-amber-300'
+                className={`text-sm font-extrabold transition-all duration-200 hover:-translate-y-0.5 flex items-center gap-1.5 px-3 py-1.5 rounded-full ${
+                  location.pathname === '/' ? 'bg-slate-950 text-amber-300 shadow-md' : 'text-slate-900 hover:bg-slate-950/10'
                 }`}
               >
                 <span>🏰</span> Sân Chơi Lịch Sử
@@ -85,8 +85,8 @@ function Layout({ children }: { children: React.ReactNode }) {
               {user?.role === 'ADMIN' && (
                 <Link
                   to="/admin"
-                  className={`text-sm font-bold transition-all duration-200 hover:-translate-y-0.5 flex items-center gap-1.5 ${
-                    location.pathname.startsWith('/admin') ? 'text-teal-400 drop-shadow-md border-b-2 border-teal-400 pb-1' : 'text-teal-500/80 hover:text-teal-400'
+                  className={`text-sm font-extrabold transition-all duration-200 hover:-translate-y-0.5 flex items-center gap-1.5 px-3 py-1.5 rounded-full ${
+                    location.pathname.startsWith('/admin') ? 'bg-teal-900 text-teal-200 shadow-md' : 'text-teal-950 hover:bg-teal-900/10'
                   }`}
                 >
                   <span>📚</span> Quản Trị Dữ Liệu SGK
@@ -101,9 +101,9 @@ function Layout({ children }: { children: React.ReactNode }) {
         {children}
       </main>
       <TerraBotWidget />
-      <footer className="mt-auto py-8 text-center text-slate-500 text-xs sm:text-sm border-t border-slate-800/80 bg-slate-950/60">
-        <p className="font-semibold text-slate-400 mb-1">🐢 Đại Việt Kids AI · Trợ lý Lịch sử & Địa lý Tiểu học (Lớp 4 & Lớp 5)</p>
-        <p>Phát triển bởi đội ngũ sáng tạo AI · Dữ liệu chuẩn Sách Giáo Khoa Bộ GD&ĐT</p>
+      <footer className="mt-auto py-8 text-center text-slate-600 text-xs sm:text-sm border-t border-amber-200/80 bg-white/80 backdrop-blur-sm">
+        <p className="font-bold text-slate-700 mb-1">🐢 Đại Việt Kids AI · Trợ lý Lịch sử & Địa lý Tiểu học (Lớp 4 & Lớp 5)</p>
+        <p className="text-slate-500">Phát triển bởi đội ngũ sáng tạo AI · Dữ liệu chuẩn Sách Giáo Khoa Bộ GD&ĐT</p>
       </footer>
     </div>
   )

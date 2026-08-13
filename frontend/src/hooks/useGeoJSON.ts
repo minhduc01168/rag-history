@@ -22,7 +22,7 @@ interface UseGeoJSONReturn {
   refetch: () => void;
 }
 
-const API_BASE_URL = 'http://localhost:8000';
+import { API_BASE_URL } from '../config/api';
 
 export function useGeoJSON(endpoint: string, params?: Record<string, string>): UseGeoJSONReturn {
   const [data, setData] = useState<GeoJSONData | null>(null);
@@ -34,7 +34,7 @@ export function useGeoJSON(endpoint: string, params?: Record<string, string>): U
     setError(null);
 
     try {
-      const url = new URL(`${API_BASE_URL}/api/v1/gis/${endpoint}`);
+      const url = new URL(`${window.location.origin}${API_BASE_URL}/gis/${endpoint}`);
       if (params) {
         Object.entries(params).forEach(([key, value]) => {
           if (value) url.searchParams.append(key, value);

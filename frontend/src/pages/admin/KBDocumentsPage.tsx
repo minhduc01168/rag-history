@@ -16,9 +16,9 @@ interface ChunkData {
   metadata: Record<string, any>;
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+import { API_BASE_URL } from '../../config/api';
 
-const API = 'http://localhost:8000/api/v1/admin/rag';
+const API = `${API_BASE_URL}/admin/rag`;
 
 function fileIcon(name: string) {
   if (name.endsWith('.pdf'))  return '📄';

@@ -45,12 +45,12 @@ export function TerraBotWidget() {
           aria-modal={isExpanded ? 'true' : undefined}
           aria-label="Cụ Rùa Thông Thái Chat"
           className={`
-            fixed flex flex-col bg-slate-900 border-2 border-amber-500/50 rounded-3xl overflow-hidden
+            fixed flex flex-col bg-white border-2 border-amber-300 rounded-3xl overflow-hidden
             transition-all duration-300 ease-in-out
             ${
               isExpanded
-                ? 'z-[201] inset-3 sm:inset-6 md:inset-10 lg:inset-16 shadow-[0_32px_80px_-8px_rgba(245,158,11,0.3)] animate-in zoom-in-95 fade-in duration-200'
-                : 'z-[100] bottom-[5.5rem] right-4 sm:right-6 shadow-2xl shadow-amber-950/60 animate-in slide-in-from-bottom-4 fade-in duration-200'
+                ? 'z-[201] inset-3 sm:inset-6 md:inset-10 lg:inset-16 shadow-2xl animate-in zoom-in-95 fade-in duration-200'
+                : 'z-[100] bottom-[5.5rem] right-4 sm:right-6 shadow-2xl shadow-amber-500/20 animate-in slide-in-from-bottom-4 fade-in duration-200'
             }
           `}
           style={
@@ -67,7 +67,7 @@ export function TerraBotWidget() {
             onToggleMode={toggleMode}
             onClose={() => { setIsOpen(false); setMode('normal'); }}
           />
-          <div className="flex-1 overflow-hidden bg-gradient-to-b from-slate-900 via-slate-900/95 to-indigo-950/50">
+          <div className="flex-1 overflow-hidden bg-gradient-to-b from-amber-50/50 via-slate-50 to-amber-50/30">
             <ChatWindow />
           </div>
         </div>
@@ -113,23 +113,23 @@ function ChatHeader({ mode, onToggleMode, onClose }: ChatHeaderProps) {
 
   return (
     <div className="
-      bg-gradient-to-r from-amber-600 via-yellow-600 to-amber-700
+      bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500
       px-5 py-3.5 flex items-center justify-between
-      text-white shrink-0 select-none border-b border-amber-500/30
+      text-slate-950 shrink-0 select-none border-b border-amber-600/20 shadow-sm
     ">
       {/* Left: Mascot Avatar + Info */}
       <div className="flex items-center gap-3">
         <div className="relative">
-          <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl shadow-inner border border-white/30">
+          <div className="w-10 h-10 bg-slate-950/15 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl shadow-inner border border-slate-950/20">
             🐢
           </div>
-          <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-400 border-2 border-amber-700 rounded-full" />
+          <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full" />
         </div>
         <div>
-          <p className="font-extrabold text-base leading-tight text-amber-100 drop-shadow-sm">
+          <p className="font-black text-base leading-tight text-slate-950 drop-shadow-sm">
             Cụ Rùa Thông Thái
           </p>
-          <p className="text-[11px] font-semibold text-amber-200/90 leading-tight">
+          <p className="text-[11px] font-extrabold text-slate-900 leading-tight">
             📜 Trợ lý Lịch sử SGK Lớp 4 & 5
           </p>
         </div>

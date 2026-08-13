@@ -1,6 +1,6 @@
-const CACHE_NAME = 'daivietkids-v1';
-const STATIC_CACHE = 'daivietkids-static-v1';
-const DYNAMIC_CACHE = 'daivietkids-dynamic-v1';
+const CACHE_NAME = 'daivietkids-v3';
+const STATIC_CACHE = 'daivietkids-static-v3';
+const DYNAMIC_CACHE = 'daivietkids-dynamic-v3';
 const OFFLINE_URL = '/offline';
 
 const PRECACHE_ASSETS = [

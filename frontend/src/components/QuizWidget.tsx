@@ -44,22 +44,22 @@ export function QuizWidget({ quiz, onNextQuiz }: QuizWidgetProps) {
   const isCorrect = selectedOption && currentQuiz.correct_answer.startsWith(selectedOption[0]);
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 via-indigo-950/80 to-slate-900 border-2 border-amber-500/40 rounded-3xl p-6 shadow-2xl relative overflow-hidden">
+    <div className="bg-white border-2 border-amber-200/80 rounded-3xl p-6 shadow-xl shadow-amber-500/5 relative overflow-hidden">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2.5">
           <span className="text-3xl animate-pulse">🎯</span>
-          <h3 className="text-xl font-bold bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
+          <h3 className="text-xl font-black text-amber-950 tracking-tight">
             Đố Vui Lịch Sử Cùng Cụ Rùa
           </h3>
         </div>
-        <span className="text-xs font-bold px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-full">
+        <span className="text-xs font-black px-3 py-1 bg-amber-100 text-amber-950 border border-amber-300 rounded-full shadow-sm">
           Góc Thử Thách
         </span>
       </div>
 
       {/* Câu hỏi */}
-      <div className="bg-slate-800/80 border border-slate-700 rounded-2xl p-5 mb-6 shadow-inner">
-        <p className="text-slate-100 font-medium text-base leading-relaxed">
+      <div className="bg-gradient-to-br from-amber-50 to-yellow-50/60 border-2 border-amber-200/80 rounded-2xl p-5 mb-6 shadow-sm">
+        <p className="text-slate-950 font-extrabold text-base leading-relaxed">
           {currentQuiz.question}
         </p>
       </div>
@@ -67,17 +67,17 @@ export function QuizWidget({ quiz, onNextQuiz }: QuizWidgetProps) {
       {/* Danh sách đáp án */}
       <div className="space-y-3">
         {currentQuiz.options.map((opt, idx) => {
-          let btnStyle = "bg-slate-800/80 hover:bg-slate-700 border-slate-700 text-slate-200";
+          let btnStyle = "bg-white hover:bg-amber-50 border-slate-200 hover:border-amber-400 text-slate-800 font-bold shadow-sm";
           if (isAnswered) {
             const isThisCorrect = currentQuiz.correct_answer.startsWith(opt[0]);
             const isThisSelected = selectedOption === opt;
 
             if (isThisCorrect) {
-              btnStyle = "bg-emerald-600 text-white border-emerald-400 shadow-lg shadow-emerald-500/30 font-bold scale-[1.02]";
+              btnStyle = "bg-emerald-500 text-white border-emerald-600 shadow-md font-black scale-[1.02]";
             } else if (isThisSelected && !isThisCorrect) {
-              btnStyle = "bg-rose-600 text-white border-rose-400 shadow-lg shadow-rose-500/30 font-bold";
+              btnStyle = "bg-rose-500 text-white border-rose-600 shadow-md font-black";
             } else {
-              btnStyle = "bg-slate-800/40 border-slate-700/50 text-slate-500 opacity-60";
+              btnStyle = "bg-slate-50 border-slate-200 text-slate-400 opacity-60 font-bold";
             }
           }
 
@@ -107,15 +107,15 @@ export function QuizWidget({ quiz, onNextQuiz }: QuizWidgetProps) {
       {/* Giải thích sau khi trả lời */}
       {isAnswered && (
         <div className={`
-          mt-6 p-5 rounded-2xl border-2 animate-in fade-in slide-in-from-bottom-3 duration-300
+          mt-6 p-5 rounded-2xl border-2 animate-in fade-in slide-in-from-bottom-3 duration-300 shadow-md
           ${isCorrect
-            ? 'bg-emerald-950/80 border-emerald-500/50 text-emerald-100 shadow-lg shadow-emerald-900/30'
-            : 'bg-rose-950/80 border-rose-500/50 text-rose-100 shadow-lg shadow-rose-900/30'}
+            ? 'bg-emerald-50 border-emerald-300 text-emerald-950'
+            : 'bg-rose-50 border-rose-300 text-rose-950'}
         `}>
-          <div className="flex items-center gap-2 mb-2 font-bold text-base">
+          <div className="flex items-center gap-2 mb-2 font-black text-base">
             <span>{isCorrect ? '🎉 Hoan hô! Cháu trả lời chính xác!' : '💡 Chưa đúng rồi! Cháu thử nhớ lại xem nhé:'}</span>
           </div>
-          <p className="text-sm leading-relaxed opacity-95">
+          <p className="text-sm font-bold leading-relaxed text-slate-800">
             {currentQuiz.explanation}
           </p>
 

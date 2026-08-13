@@ -38,41 +38,41 @@ export function MascotWidget({
   ];
 
   return (
-    <div className="bg-gradient-to-br from-indigo-950/90 via-slate-900/90 to-slate-900/90 backdrop-blur-md border-2 border-amber-500/40 rounded-3xl p-6 shadow-2xl relative overflow-hidden">
+    <div className="bg-white border-2 border-amber-300/80 rounded-3xl p-6 shadow-xl shadow-amber-500/10 relative overflow-hidden">
       {/* Decorative background glow */}
-      <div className="absolute -right-10 -top-10 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -right-10 -top-10 w-40 h-40 bg-amber-400/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-yellow-400/20 rounded-full blur-3xl pointer-events-none" />
 
       <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
         {/* Mascot Avatar & Animation */}
         <div className="relative shrink-0 flex flex-col items-center">
           <div className={`
-            w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600
+            w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-br from-amber-400 via-yellow-400 to-amber-500
             flex items-center justify-center text-5xl sm:text-6xl
-            shadow-xl shadow-amber-500/20 border-4 border-amber-200
+            shadow-lg shadow-amber-500/25 border-4 border-white
             transition-transform duration-500
             ${isTalking ? 'animate-bounce scale-110' : 'hover:scale-105'}
           `}>
             {getMascotEmoji()}
           </div>
-          <span className="mt-2 text-xs font-bold px-3 py-1 bg-amber-500/30 text-amber-300 border border-amber-500/40 rounded-full shadow-sm">
+          <span className="mt-2.5 text-xs font-black px-3 py-1 bg-amber-100 text-amber-950 border border-amber-300 rounded-full shadow-sm">
             Cụ Rùa Thông Thái
           </span>
         </div>
 
         {/* Speech Bubble */}
-        <div className="flex-1 bg-slate-800/80 border border-slate-700/80 rounded-2xl p-5 relative shadow-inner">
+        <div className="flex-1 bg-gradient-to-br from-amber-50/90 to-yellow-50/70 border-2 border-amber-200/80 rounded-2xl p-5 relative shadow-sm">
           {/* Bubble Arrow (desktop left, mobile top) */}
-          <div className="hidden md:block absolute -left-3 top-8 w-6 h-6 bg-slate-800 border-l border-b border-slate-700/80 transform rotate-45" />
-          <div className="md:hidden absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-slate-800 border-l border-t border-slate-700/80 transform rotate-45" />
+          <div className="hidden md:block absolute -left-3 top-8 w-6 h-6 bg-amber-50 border-l-2 border-b-2 border-amber-200/80 transform rotate-45" />
+          <div className="md:hidden absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-amber-50 border-l-2 border-t-2 border-amber-200/80 transform rotate-45" />
 
-          <p className="text-slate-100 text-sm sm:text-base leading-relaxed font-medium">
+          <p className="text-slate-900 text-sm sm:text-base leading-relaxed font-bold">
             {bubbleText}
           </p>
 
           {/* Quick Suggestion Chips */}
-          <div className="mt-4 pt-4 border-t border-slate-700/60">
-            <p className="text-xs font-semibold text-amber-400 mb-2 flex items-center gap-1.5">
+          <div className="mt-4 pt-4 border-t border-amber-200/80">
+            <p className="text-xs font-black text-amber-950 mb-2 flex items-center gap-1.5">
               <span>💡</span> Gợi ý câu hỏi cho Cụ Rùa:
             </p>
             <div className="flex flex-wrap gap-2">
@@ -80,7 +80,7 @@ export function MascotWidget({
                 <button
                   key={idx}
                   onClick={() => onAskMascot && onAskMascot(q)}
-                  className="text-xs bg-slate-700/70 hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 border border-slate-600 hover:border-amber-500/40 px-3 py-1.5 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 text-left"
+                  className="text-xs font-bold bg-white hover:bg-amber-500 text-slate-800 hover:text-slate-950 border border-amber-300 shadow-sm px-3 py-1.5 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 text-left"
                 >
                   {q}
                 </button>
