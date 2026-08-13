@@ -34,7 +34,7 @@ export function Dashboard() {
               ✨ Sân chơi Lịch sử Tiểu học · SGK Lớp 4 & Lớp 5
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-2 drop-shadow-md bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-400 bg-clip-text text-transparent">
-              Lumos History Playground
+              Đại Việt Kids Playground
             </h2>
             <p className="text-slate-400 text-sm mt-1">
               Khám phá hào khí ngàn năm qua từng thẻ bài, dòng thời gian và thử thách đố vui!
