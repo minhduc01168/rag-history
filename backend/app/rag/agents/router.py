@@ -36,7 +36,7 @@ class RouterAgent:
                     break
             return {"route": "roleplay", "character": character}
 
-        prompt = f"""Bạn là một hệ thống phân loại câu hỏi (Router) cho ứng dụng học lịch sử tiểu học (Lumos History Bot).
+        prompt = f"""Bạn là một hệ thống phân loại câu hỏi (Router) cho ứng dụng học lịch sử tiểu học (Đại Việt Kids AI).
 Nhiệm vụ của bạn là đọc câu hỏi của học sinh và trả về một JSON HỢP LỆ (chỉ có JSON, không có text nào khác) với 2 trường:
 - "route": Chọn 1 trong 3 giá trị:
   - "quiz": Nếu học sinh yêu cầu đố vui, làm bài tập trắc nghiệm, hoặc muốn được hỏi thử thách kiến thức.

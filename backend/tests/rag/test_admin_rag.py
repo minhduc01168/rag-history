@@ -10,7 +10,7 @@ client = TestClient(app)
 
 # Mock admin user dependency
 def override_get_current_admin_user():
-    return {"id": 1, "email": "admin@terraalert.com", "role": "ADMIN"}
+    return {"id": 1, "email": "admin@daivietkids.edu.vn", "role": "ADMIN"}
 
 app.dependency_overrides[get_current_admin_user] = override_get_current_admin_user
 

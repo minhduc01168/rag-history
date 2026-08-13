@@ -8,7 +8,7 @@ from app.rag.guardrails import ChildSafetyGuardrail
 
 class SynthesisAgent:
     """
-    Master Orchestrator cho Lumos History Bot:
+    Master Orchestrator cho Đại Việt Kids AI:
     1. Kiểm tra an toàn đầu vào (Guardrails)
     2. Định tuyến ý định (RouterAgent -> knowledge | roleplay | quiz)
     3. Điều phối Agent chuyên trách xử lý

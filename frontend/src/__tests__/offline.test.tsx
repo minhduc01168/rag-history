@@ -3,43 +3,18 @@ import { render, screen } from '@testing-library/react';
 import App from '../App';
 
 describe('Offline Mode Tests', () => {
-  it('renders TerraAlert title', () => {
+  it('renders Đại Việt Kids AI title', () => {
     render(<App />);
-    expect(screen.getAllByText(/TerraAlert/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Đại Việt Kids AI/i).length).toBeGreaterThan(0);
   });
 
-  it('renders dashboard on home page', () => {
+  it('renders mascot Cụ Rùa on home page', () => {
     render(<App />);
-    expect(screen.getByText(/Dashboard/i)).toBeInTheDocument();
-  });
-
-  it('shows SOS button on dashboard', () => {
-    render(<App />);
-    expect(screen.getByText(/SOS KHẨN CẤP/i)).toBeInTheDocument();
-  });
-
-  it('displays weather information', () => {
-    render(<App />);
-    expect(screen.getByText(/Thời tiết hiện tại/i)).toBeInTheDocument();
-  });
-
-  it('shows alert status', () => {
-    render(<App />);
-    expect(screen.getByText(/An toàn/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Cụ Rùa/i).length).toBeGreaterThan(0);
   });
 
   it('renders navigation links', () => {
     render(<App />);
-    expect(screen.getByRole('link', { name: /Trang chủ/i })).toBeInTheDocument();
-    expect(screen.getAllByRole('link', { name: /Cảnh báo/i }).length).toBeGreaterThan(0);
-    expect(screen.getAllByRole('link', { name: /Cẩm nang/i }).length).toBeGreaterThan(0);
-  });
-});
-
-describe('Survival Guide Tests', () => {
-  it('renders survival page components', () => {
-    render(<App />);
-    // Verify main components exist
-    expect(screen.getByText(/Dashboard/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Sân Chơi Lịch Sử/i })).toBeInTheDocument();
   });
 });

@@ -211,7 +211,7 @@ export const translations: Record<Language, TranslationKeys> = {
       retry: 'Thử lại',
       offlineTitle: 'Không có kết nối',
       offlineDesc: 'Vui lòng kiểm tra mạng và thử lại',
-      footerText: 'Lumos History Bot - Trợ lý Lịch sử & Địa lý Tiểu học (Lớp 4 & 5)',
+      footerText: 'Đại Việt Kids AI - Trợ lý Lịch sử & Địa lý Tiểu học (Lớp 4 & 5)',
     },
     home: {
       title: 'Sân chơi Lịch sử & Địa lý Tiểu học',
@@ -395,7 +395,7 @@ export const translations: Record<Language, TranslationKeys> = {
       retry: 'Retry',
       offlineTitle: 'No Connection',
       offlineDesc: 'Please check your network and try again',
-      footerText: 'Lumos History Bot - Elementary History & Geography Assistant (Grades 4 & 5)',
+      footerText: 'Dai Viet Kids AI - Elementary History & Geography Assistant (Grades 4 & 5)',
     },
     home: {
       title: 'Elementary History & Geography Playground',

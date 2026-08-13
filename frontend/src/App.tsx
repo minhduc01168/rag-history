@@ -70,7 +70,7 @@ function Layout({ children }: { children: React.ReactNode }) {
             <h1 className="text-2xl font-extrabold flex items-center gap-2">
               <span className="text-3xl animate-bounce">🐢</span>
               <Link to="/" className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent drop-shadow-sm hover:opacity-90">
-                Lumos History
+                Đại Việt Kids AI
               </Link>
             </h1>
             <nav className="hidden md:flex gap-6">
@@ -102,7 +102,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       </main>
       <TerraBotWidget />
       <footer className="mt-auto py-8 text-center text-slate-500 text-xs sm:text-sm border-t border-slate-800/80 bg-slate-950/60">
-        <p className="font-semibold text-slate-400 mb-1">🐢 Lumos History Bot · Trợ lý Lịch sử & Địa lý Tiểu học (Lớp 4 & Lớp 5)</p>
+        <p className="font-semibold text-slate-400 mb-1">🐢 Đại Việt Kids AI · Trợ lý Lịch sử & Địa lý Tiểu học (Lớp 4 & Lớp 5)</p>
         <p>Phát triển bởi đội ngũ sáng tạo AI · Dữ liệu chuẩn Sách Giáo Khoa Bộ GD&ĐT</p>
       </footer>
     </div>
@@ -139,9 +139,6 @@ function App() {
           <Layout>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/alerts" element={<Home />} />
-              <Route path="/survival" element={<Home />} />
-              <Route path="/research" element={<Home />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/offline" element={<Offline />} />

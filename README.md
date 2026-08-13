@@ -1,4 +1,4 @@
-# 🐢 Lumos History Bot — Trợ Lý AI Lịch Sử & Địa Lý Tiểu Học
+# 🐢 Đại Việt Kids AI — Trợ Lý AI Lịch Sử & Địa Lý Tiểu Học
 
 > **Hệ thống Chatbot AI (Agentic RAG) chuyên biệt cho học sinh Lớp 4 & Lớp 5 với hình tượng "Cụ Rùa Thông Thái", tích hợp bộ lọc an toàn cho trẻ em (Child Safety Guardrails) và kiến trúc đa tác tử (Multi-Agent Architecture).**
 
@@ -6,7 +6,7 @@
 
 ## 🌟 1. Giới Thiệu Dự Án
 
-**Lumos History Bot** là bước chuyển đổi toàn diện từ hệ thống RAG cảnh báo thiên tai (TerraAlert) sang một không gian học tập lịch sử tương tác, trực quan và an toàn cho học sinh tiểu học (Lớp 4 & Lớp 5 theo Chương trình Sách Giáo Khoa Bộ GD&ĐT).
+**Đại Việt Kids AI** là nền tảng RAG tương tác học tập lịch sử và địa lý dành cho học sinh tiểu học (Lớp 4 & Lớp 5 theo Chương trình Sách Giáo Khoa Bộ GD&ĐT).
 
 ### 🎯 Điểm Nổi Bật:
 1. **Persona "Cụ Rùa Thông Thái":** Giọng văn ấm áp, đôn hậu, xưng hô *"Cụ Rùa - cháu"*, luôn kể chuyện sinh động, kết thúc bằng câu hỏi gợi mở để kích thích trí tò mò của trẻ.

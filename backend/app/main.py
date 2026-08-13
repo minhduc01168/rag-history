@@ -10,11 +10,9 @@ from contextlib import asynccontextmanager
 from concurrent.futures import ThreadPoolExecutor
 from app.db.session import engine, Base, SessionLocal
 from app.models.user import UserRole
-from app.models.gis import SpatialFeature
 from app.crud.crud_user import get_user_by_email, create_user
 from app.schemas.user import UserCreate
 from app.rag.retrieval.reranker import Reranker
-from sqlalchemy import text
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -28,49 +26,24 @@ async def lifespan(app: FastAPI):
     print("[Startup] Reranker warm-up đã được khởi động (background thread).")
 
     # ── 1. Initialize DB tables ──
-    with engine.begin() as conn:
-        conn.execute(text("CREATE EXTENSION IF NOT EXISTS postgis;"))
-    
     Base.metadata.create_all(bind=engine)
     
-    # Seed Admin User and Spatial Data
+    # Seed Admin User
     db = SessionLocal()
     try:
-        admin_email = "admin@terraalert.com"
+        admin_email = "admin@daivietkids.edu.vn"
         admin_user = get_user_by_email(db, email=admin_email)
         if not admin_user:
             print("Seeding default admin user...")
             admin_in = UserCreate(
                 email=admin_email,
                 password="admin", # Default password, will be hashed
-                full_name="System Administrator",
+                full_name="Quản Trị Viên Đại Việt Kids",
                 phone="0900000000",
                 location="Hà Nội"
             )
             create_user(db, user=admin_in, role=UserRole.ADMIN)
             print("Admin user created successfully.")
-            
-        # Seed default GIS data if empty
-        if db.query(SpatialFeature).count() == 0:
-            print("Seeding default spatial features...")
-            feature1 = SpatialFeature(
-                layer_name="disasters",
-                properties={"name": "Sạt lở đất lịch sử Mù Cang Chải", "risk_level": "high", "magnitude": "severe"},
-                geom="SRID=4326;POINT(104.0848 21.8542)"
-            )
-            feature2 = SpatialFeature(
-                layer_name="lsm",
-                properties={"risk_level": "high", "area": "Mù Cang Chải Red Zone"},
-                geom="SRID=4326;POLYGON((104.0 21.8, 104.2 21.8, 104.2 22.0, 104.0 22.0, 104.0 21.8))"
-            )
-            feature3 = SpatialFeature(
-                layer_name="elevation",
-                properties={"elevation": 1500},
-                geom="SRID=4326;POINT(104.1 21.9)"
-            )
-            db.add_all([feature1, feature2, feature3])
-            db.commit()
-            print("Spatial features seeded successfully.")
     finally:
         db.close()
     

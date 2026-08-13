@@ -65,7 +65,7 @@ export function LoginPage() {
           <div className="text-center mb-8">
             <div className="text-5xl mb-3 animate-bounce">🐢</div>
             <h1 className="text-3xl font-extrabold bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent mb-2">
-              Lumos History
+              Đại Việt Kids AI
             </h1>
             <p className="text-slate-300 text-sm">Đăng nhập vào Sân chơi Lịch sử & Địa lý</p>
           </div>
@@ -85,7 +85,7 @@ export function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full bg-slate-950/60 border border-slate-700/80 focus:border-amber-500 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all text-sm"
-                placeholder="hocsinh@lumoshistory.edu.vn"
+                placeholder="hocsinh@daivietkids.edu.vn"
               />
             </div>
 

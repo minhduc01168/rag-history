@@ -14,7 +14,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const setLang = (newLang: Language) => {
     setLangState(newLang);
-    localStorage.setItem('terra_lang', newLang);
+    localStorage.setItem('daivietkids_lang', newLang);
   };
 
   // Helper function to access nested translation keys like 'nav.home' or 'weather.currentTemp'

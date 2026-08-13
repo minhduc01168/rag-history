@@ -1,13 +1,13 @@
 {
-  "name": "TerraAlert - Hệ thống Cảnh báo Thiên tai",
-  "short_name": "TerraAlert",
-  "description": "Hệ thống cảnh báo thiên tai thông minh cho vùng núi Việt Nam",
+  "name": "Đại Việt Kids AI — Sân chơi Lịch sử & Địa lý",
+  "short_name": "DaiVietKids",
+  "description": "Sân chơi Lịch sử & Địa lý Tiểu học thông minh cùng Cụ Rùa Thông Thái",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#2563eb",
+  "background_color": "#0f172a",
+  "theme_color": "#f59e0b",
   "orientation": "portrait-primary",
-  "categories": ["weather", "navigation", "utilities"],
+  "categories": ["education", "history", "kids"],
   "lang": "vi",
   "dir": "ltr"
 }

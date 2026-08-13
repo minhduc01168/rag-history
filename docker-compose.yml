@@ -10,7 +10,7 @@ services:
     depends_on:
       - backend
     networks:
-      - terraalert-network
+      - daivietkids-network
 
   backend:
     build:
@@ -21,7 +21,7 @@ services:
     env_file:
       - ./backend/.env
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/terraalert
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/daivietkids_db
       - CHROMA_HOST=chromadb
       - CHROMA_PORT=8000
     depends_on:
@@ -29,20 +29,20 @@ services:
       - chromadb
 #      - redis
     networks:
-      - terraalert-network
+      - daivietkids-network
 
   postgres:
     image: postgis/postgis:15-3.4-alpine
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: terraalert
+      POSTGRES_DB: daivietkids_db
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - terraalert-network
+      - daivietkids-network
 #
 #  redis:
 #    image: redis:7-alpine
@@ -51,7 +51,7 @@ services:
 #    volumes:
 #      - redis_data:/data
 #    networks:
-#      - terraalert-network
+#      - daivietkids-network
 
   chromadb:
     image: chromadb/chroma:latest
@@ -65,7 +65,7 @@ services:
     volumes:
       - chroma_data:/chroma/chroma
     networks:
-      - terraalert-network
+      - daivietkids-network
 
   embedding_service:
     build:
@@ -80,15 +80,14 @@ services:
     volumes:
       - hf_model_cache:/root/.cache/huggingface
     networks:
-      - terraalert-network
+      - daivietkids-network
 
 volumes:
   postgres_data:
   redis_data:
   chroma_data:        # Dữ liệu ChromaDB — KHÔNG xóa khi rebuild (chỉ mất khi down -v)
   hf_model_cache:     # Cache model HuggingFace — tránh tải lại model mỗi lần rebuild
-  # backend_chroma đã xóa — volume này không được dùng trong Docker mode (HttpClient)
 
 networks:
-  terraalert-network:
+  daivietkids-network:
     driver: bridge

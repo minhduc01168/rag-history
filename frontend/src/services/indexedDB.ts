@@ -1,6 +1,6 @@
-const DB_NAME = 'terraalert-db';
+const DB_NAME = 'daivietkids-db';
 const DB_VERSION = 1;
-const STORE_NAME = 'survival-guides';
+const STORE_NAME = 'history-handbooks';
 
 interface StoredGuide {
   id: string;

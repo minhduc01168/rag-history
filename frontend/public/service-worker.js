@@ -1,6 +1,6 @@
-const CACHE_NAME = 'terraalert-v2';
-const STATIC_CACHE = 'terraalert-static-v2';
-const DYNAMIC_CACHE = 'terraalert-dynamic-v2';
+const CACHE_NAME = 'daivietkids-v1';
+const STATIC_CACHE = 'daivietkids-static-v1';
+const DYNAMIC_CACHE = 'daivietkids-dynamic-v1';
 const OFFLINE_URL = '/offline';
 
 const PRECACHE_ASSETS = [
@@ -11,8 +11,7 @@ const PRECACHE_ASSETS = [
 ];
 
 const CACHEABLE_PATHS = [
-  '/survival',
-  '/api/v1/fast-lane/alerts',
+  '/api/v1/rag/chat',
 ];
 
 self.addEventListener('install', (event) => {

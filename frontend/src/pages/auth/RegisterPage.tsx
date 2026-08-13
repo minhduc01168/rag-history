@@ -62,7 +62,7 @@ export function RegisterPage() {
             <h1 className="text-3xl font-extrabold bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent mb-2">
               Đăng Ký Tài Khoản Học Sinh
             </h1>
-            <p className="text-slate-300 text-sm">Tham gia Sân chơi Lịch sử & Địa lý Tiểu học Lumos History</p>
+            <p className="text-slate-300 text-sm">Tham gia Sân chơi Lịch sử & Địa lý Tiểu học Đại Việt Kids AI</p>
           </div>
 
           {error && (
