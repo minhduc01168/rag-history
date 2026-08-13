@@ -24,6 +24,8 @@ services:
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/daivietkids_db
       - CHROMA_HOST=chromadb
       - CHROMA_PORT=8000
+    volumes:
+      - ./backend:/app
     depends_on:
       - postgres
       - chromadb
