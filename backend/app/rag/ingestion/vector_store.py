@@ -6,32 +6,32 @@ import requests
 from chromadb import Documents, EmbeddingFunction, Embeddings
 
 class CustomHTTPEmbeddingFunction(EmbeddingFunction):
-    def __init__(self, api_url: str, timeout: int = 300):
+    def __init__(self, api_url: str, timeout: int = 5):
         self.api_url = api_url
-        self.timeout = timeout  # 5 phút — model 270M cần thời gian encode
+        self.timeout = timeout
 
     def __call__(self, input: Documents) -> Embeddings:
         n = len(input)
-        print(f"[Embedding] Đang encode {n} chunks... (có thể mất vài phút với model 270M)")
-        t0 = time.time()  # Fix: định nghĩa t0 trước khối try để tránh NameError
+        print(f"[Embedding] Đang encode {n} chunks...")
+        t0 = time.time()
         try:
             response = requests.post(
                 self.api_url,
                 json={"texts": input},
-                timeout=self.timeout  # tránh bị timeout khi encode nhiều chunks
+                timeout=self.timeout
             )
             response.raise_for_status()
             elapsed = time.time() - t0
-            print(f"[Embedding] ✅ Hoàn thành {n} chunks trong {elapsed:.1f}s ({elapsed/n:.2f}s/chunk)")
+            print(f"[Embedding] ✅ Hoàn thành {n} chunks trong {elapsed:.2f}s ({elapsed/max(1,n):.3f}s/chunk)")
             return response.json()["embeddings"]
         except Exception as e:
             print(f"[Embedding] ⚠️ Không thể kết nối embedding service tại {self.api_url}: {e}. Sử dụng mock vectors cho offline/testing!")
             import hashlib
             mock_vecs = []
             for t in input:
-                vec = [0.0] * 384
+                vec = [0.0] * 640
                 for w in t.lower().split():
-                    idx = int(hashlib.md5(w.encode('utf-8')).hexdigest(), 16) % 384
+                    idx = int(hashlib.md5(w.encode('utf-8')).hexdigest(), 16) % 640
                     vec[idx] += 1.0
                 mock_vecs.append(vec)
             return mock_vecs
@@ -68,7 +68,7 @@ class ChromaManager:
 
     def add_documents(self, docs):
         """
-        Nhận vào danh sách các Document (từ langchain text splitter) và lưu vào ChromaDB.
+        Nhận vào danh sách các Document và lưu vào ChromaDB theo từng batch (tránh timeout/treo).
         """
         if not docs:
             return
@@ -80,19 +80,28 @@ class ChromaManager:
         for i, doc in enumerate(docs):
             documents.append(doc.page_content)
             metadatas.append(doc.metadata if doc.metadata else {"source": "unknown"})
-            # Dùng UUID4 để đảm bảo ID luôn unique, tránh overwrite khi loop nhanh
             ids.append(str(uuid.uuid4()))
 
-        # Thêm vào collection — embedding được gọi 1 lần duy nhất cho toàn bộ batch
-        print(f"[ChromaDB] Bắt đầu lưu {len(docs)} chunks...")
+        total_chunks = len(docs)
+        batch_size = 10
+        print(f"[ChromaDB] Bắt đầu lưu {total_chunks} chunks (batch_size={batch_size})...")
         t_start = time.time()
-        self.collection.add(
-            documents=documents,
-            metadatas=metadatas,
-            ids=ids
-        )
+
+        for start_idx in range(0, total_chunks, batch_size):
+            end_idx = min(start_idx + batch_size, total_chunks)
+            b_docs = documents[start_idx:end_idx]
+            b_meta = metadatas[start_idx:end_idx]
+            b_ids = ids[start_idx:end_idx]
+            
+            print(f"[ChromaDB] -> Đang thêm batch {start_idx + 1}-{end_idx}/{total_chunks}...")
+            self.collection.add(
+                documents=b_docs,
+                metadatas=b_meta,
+                ids=b_ids
+            )
+
         t_total = time.time() - t_start
-        print(f"[ChromaDB] ✅ Đã lưu {len(docs)} chunks vào '{self.collection_name}' trong {t_total:.1f}s")
+        print(f"[ChromaDB] ✅ Đã lưu thành công {total_chunks} chunks vào '{self.collection_name}' trong {t_total:.2f}s")
 
     def search(self, query: str, n_results: int = 3):
         """

@@ -102,8 +102,8 @@ function Layout({ children }: { children: React.ReactNode }) {
       </main>
       <TerraBotWidget />
       <footer className="mt-auto py-8 text-center text-slate-600 text-xs sm:text-sm border-t border-amber-200/80 bg-white/80 backdrop-blur-sm">
-        <p className="font-bold text-slate-700 mb-1">🐢 Đại Việt Kids AI · Trợ lý Lịch sử & Địa lý Tiểu học (Lớp 4 & Lớp 5)</p>
-        <p className="text-slate-500">Phát triển bởi đội ngũ sáng tạo AI · Dữ liệu chuẩn Sách Giáo Khoa Bộ GD&ĐT</p>
+        <p className="font-bold text-slate-700 mb-1">🐢 Đại Việt Kids AI · Trợ lý Lịch sử Tiểu học (Lớp 4 & Lớp 5)</p>
+        <p className="text-slate-500">Phát triển bởi đội ngũ sáng tạo AI · Dữ liệu chuẩn Sách Giáo Khoa Lịch sử Bộ GD&ĐT</p>
       </footer>
     </div>
   )

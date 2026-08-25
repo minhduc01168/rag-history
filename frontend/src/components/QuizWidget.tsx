@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { parseInlineMarkdown } from './chat/MessageBubble';
 
 export interface QuizData {
   question: string;
@@ -60,7 +61,7 @@ export function QuizWidget({ quiz, onNextQuiz }: QuizWidgetProps) {
       {/* Câu hỏi */}
       <div className="bg-gradient-to-br from-amber-50 to-yellow-50/60 border-2 border-amber-200/80 rounded-2xl p-5 mb-6 shadow-sm">
         <p className="text-slate-950 font-extrabold text-base leading-relaxed">
-          {currentQuiz.question}
+          {parseInlineMarkdown(currentQuiz.question)}
         </p>
       </div>
 

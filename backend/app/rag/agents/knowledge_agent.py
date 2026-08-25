@@ -2,27 +2,39 @@ from app.rag.retrieval.hybrid_search import HybridSearcher
 from app.rag.retrieval.reranker import Reranker
 from app.rag.ingestion.vector_store import ChromaManager
 
+
 class KnowledgeAgent:
     """
-    Agent chuyên phụ trách tra cứu thông tin từ Sách giáo khoa Lịch sử & Địa lý Lớp 4 & 5.
+    Agent chuyên phụ trách tra cứu thông tin từ Sách giáo khoa Lịch sử Lớp 4 & 5.
     Sử dụng kiến trúc Advanced RAG: Semantic Search với ChromaDB + BM25 + Reranking.
     """
     def __init__(self, chroma_manager: ChromaManager = None, use_reranker: bool = True):
         self.chroma_manager = chroma_manager or ChromaManager()
-        
-        # Lấy toàn bộ văn bản để xây dựng tập BM25 (chạy ngầm trong RAM)
-        all_data = self.chroma_manager.get_all_documents()
-        documents = all_data.get("documents", []) if all_data else []
-        self.hybrid_searcher = HybridSearcher(documents) if documents else None
-        
+        self.hybrid_searcher = None
+        self.last_doc_count = 0
+        self._refresh_hybrid_searcher()
+
         # Khởi tạo Reranker (nếu dùng)
         self.reranker = Reranker(mock=False) if use_reranker else None
+
+    def _refresh_hybrid_searcher(self):
+        """Khởi tạo hoặc cập nhật BM25 index khi có tài liệu mới."""
+        try:
+            all_data = self.chroma_manager.get_all_documents()
+            documents = all_data.get("documents", []) if all_data else []
+            if documents and len(documents) != self.last_doc_count:
+                self.hybrid_searcher = HybridSearcher(documents)
+                self.last_doc_count = len(documents)
+        except Exception as e:
+            print(f"[KnowledgeAgent] Không thể refresh hybrid searcher: {e}")
 
     def answer_query(self, query: str) -> dict:
         """
         Xử lý câu hỏi bằng kiến thức nội bộ (Advanced RAG).
         """
         try:
+            self._refresh_hybrid_searcher()
+
             # 1. Semantic Search (Vector) từ ChromaDB
             results = self.chroma_manager.search(query, n_results=10)
             vector_docs = []
@@ -39,7 +51,7 @@ class KnowledgeAgent:
 
             # Nếu cả 2 đều rỗng thì báo lỗi
             if not vector_docs and not bm25_docs:
-                return {"answer": "Không tìm thấy thông tin liên quan trong sách giáo khoa Lịch sử.", "sources": []}
+                return {"answer": "", "sources": []}
 
             # 3. Reciprocal Rank Fusion (RRF)
             if self.hybrid_searcher:
@@ -54,7 +66,7 @@ class KnowledgeAgent:
                 final_docs = fused_docs[:3]
 
             # 5. Tổng hợp câu trả lời
-            context_str = "\n".join([doc["text"] for doc in final_docs])
+            context_str = "\n".join([doc["text"] for doc in final_docs if doc.get("text")])
 
             # Tạo danh sách nguồn trích dẫn: ưu tiên tên file, fallback sang text snippet
             seen = set()
@@ -76,6 +88,4 @@ class KnowledgeAgent:
             import traceback
             traceback.print_exc()
             print(f"Error querying Knowledge Base: {e}")
-            return {"answer": "Đã có lỗi xảy ra khi truy xuất cơ sở dữ liệu.", "sources": []}
-
-
+            return {"answer": "", "sources": []}

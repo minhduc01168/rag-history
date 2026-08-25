@@ -12,7 +12,7 @@ class RoleplayAgent:
         self.knowledge_agent = knowledge_agent or KnowledgeAgent()
         self.llm = llm_generator or LLMGenerator(mock=False)
 
-    def process(self, query: str, target_character: str = None) -> Dict[str, Any]:
+    def process(self, query: str, target_character: str = None, history: List[Dict[str, str]] = None) -> Dict[str, Any]:
         """
         1. Tìm kiếm kiến thức lịch sử thực tế liên quan đến câu hỏi và nhân vật.
         2. Dùng LLM nhập vai nhân vật trả lời theo giọng điệu ngôi thứ nhất (Ta/Cụ Rùa - cháu/bạn nhỏ).
@@ -26,8 +26,17 @@ class RoleplayAgent:
         sources = retrieval_result.get("sources", [])
 
         # 2. Xây dựng Prompt nhập vai chuyên sâu cho trẻ em
+        history_str = ""
+        if history:
+            history_str = "**Lịch sử trò chuyện gần đây:**\n"
+            for h in history:
+                r = "Học sinh" if h.get("role") == "user" else character
+                history_str += f"- {r}: {h.get('content')}\n"
+            history_str += "\n"
+
         roleplay_prompt = (
             f"Bạn đang đóng vai: **{character}** trong một cuộc trò chuyện lịch sử với học sinh Tiểu học (Lớp 4, Lớp 5).\n\n"
+            f"{history_str}"
             f"**Ngữ cảnh lịch sử chính xác từ Sách giáo khoa:**\n{context}\n\n"
             f"**Câu hỏi của học sinh:** \"{query}\"\n\n"
             f"**QUY TẮC NHẬP VAI NGHIÊM NGẶT:**\n"

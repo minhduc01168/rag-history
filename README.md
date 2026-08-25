@@ -90,37 +90,51 @@ rag-history/
 
 ---
 
-## 🚀 4. Hướng Dẫn Cài Đặt & Chạy Thử nghiệm
+## 🚀 4. Hướng Dẫn Cài Đặt & Triển Khai (Deployment Guide)
 
-### Cách 1: Chạy bằng Docker Compose (Khuyên dùng)
+Chi tiết toàn bộ quy trình, kiến trúc, sao lưu và xử lý sự cố có tại: **[Tài liệu Hướng dẫn Triển khai Chi tiết](file:///home/mypc/rag-history/docs/DEPLOYMENT_GUIDE.md)**.
+
+### Cách 1: Chạy Môi Trường Phát Triển Cục Bộ (Local Development với Hot-Reload)
+Dành cho lập trình viên phát triển tính năng, sửa code phản hồi ngay lập tức (HMR):
 ```bash
-# 1. Build và khởi động các dịch vụ
-docker-compose up --build -d
+# 1. Khởi tạo file môi trường
+cp .env.local.example backend/.env
 
-# 2. Truy cập ứng dụng
-# - Frontend (Sân chơi Lịch sử): http://localhost:5173
+# 2. Khởi động hệ thống Local
+docker compose -f docker-compose.local.yml up --build -d
+
+# 3. Truy cập ứng dụng
+# - Frontend (Vite HMR): http://localhost:3000
 # - Backend API Docs: http://localhost:8000/docs
 ```
 
-### Cách 2: Chạy môi trường Local (Phát triển)
-
-**Bước 1: Khởi động Backend (FastAPI)**
+### Cách 2: Triển Khai Máy Chủ Production (Production Deploy)
+Dành cho môi trường triển khai thực tế trên server, tối ưu Nginx tĩnh, healthcheck, và restart policies:
 ```bash
-cd backend
-python -m venv venv
-source venv/bin/activate  # (hoặc venv\Scripts\activate trên Windows)
-pip install -r requirements.txt
+# 1. Cấu hình biến môi trường production
+cp .env.prod.example backend/.env
 
-# Khởi động máy chủ API
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+# 2. Khởi động 5 microservices production
+docker compose -f docker-compose.prod.yml up --build -d
+
+# 3. Kiểm tra trạng thái sức khỏe
+docker compose -f docker-compose.prod.yml ps
+# Truy cập: http://localhost (Port 80)
 ```
 
-**Bước 2: Khởi động Frontend (React + Vite)**
+### Cách 3: Chạy Native không dùng Docker (Python & Node.js)
 ```bash
+# Backend
+cd backend
+python3 -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+# Frontend (terminal khác)
 cd frontend
 npm install
 npm run dev
-# Truy cập: http://localhost:5173
+# Truy cập: http://localhost:3000
 ```
 
 ---

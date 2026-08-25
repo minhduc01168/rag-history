@@ -77,7 +77,7 @@ export function HistoryCard({ period, onExploreMore }: HistoryCardProps) {
                   <span>Trong SGK Lớp 4 & 5:</span>
                 </div>
                 <p className="text-slate-800 text-xs sm:text-sm font-bold leading-relaxed pl-1">
-                  Bài học trọng tâm Lịch sử & Địa lý với những chiến tích vang dội ngàn năm.
+                  Bài học trọng tâm Lịch sử Lớp 4 & 5 với những chiến tích vang dội ngàn năm dựng nước và giữ nước.
                 </p>
               </div>
             </div>

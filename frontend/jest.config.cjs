@@ -11,6 +11,8 @@ module.exports = {
     '\\.(jpg|jpeg|png|gif|svg)$': '<rootDir>/src/__mocks__/fileMock.js',
     '^react-leaflet$': '<rootDir>/src/__mocks__/react-leaflet.js',
     '^leaflet$': '<rootDir>/src/__mocks__/leaflet.js',
+    '.*/config/api$': '<rootDir>/src/__mocks__/apiMock.ts',
+    '^@/config/api$': '<rootDir>/src/__mocks__/apiMock.ts',
   },
   testMatch: ['<rootDir>/src/**/__tests__/**/*.{ts,tsx}', '<rootDir>/src/**/*.{spec,test}.{ts,tsx}'],
   globals: {

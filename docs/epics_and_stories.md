@@ -77,3 +77,21 @@ Tài liệu này định nghĩa các cấu phần tính năng (Epics) và các c
   - *Là* học sinh tiểu học,
   - *Tôi muốn* một khung chat bo tròn đẹp mắt, nút bấm hình con rùa 🐢 màu vàng kim dễ thương,
   - *Để* luôn có thể trò chuyện với Cụ Rùa bất cứ lúc nào trong khi đang xem các thẻ bài.
+
+---
+
+## 🧠 EPIC 5: Bộ Nhớ Ngữ Cảnh Hội Thoại (Chat History Memory)
+**Mục tiêu:** Lưu trữ và truyền lịch sử trò chuyện (5-10 cặp chat gần nhất) để Cụ Rùa AI có khả năng "nhớ" ngữ cảnh, giúp cuộc trò chuyện liền mạch và tự nhiên hơn.
+
+- **Story 5.1 - Quản lý lịch sử ở Frontend (ChatWindow):**
+  - *Là* ứng dụng giao diện,
+  - *Tôi muốn* lưu lại các tin nhắn cũ và đính kèm danh sách `history` (chứa các cặp User - Bot) khi gọi API `/rag/chat`,
+  - *Để* gửi lên server toàn bộ bối cảnh câu chuyện.
+- **Story 5.2 - Cập nhật API Backend (rag_router):**
+  - *Là* hệ thống server,
+  - *Tôi muốn* cập nhật cấu trúc `QueryRequest` để tiếp nhận mảng `history` từ Frontend gửi lên,
+  - *Để* có dữ liệu lịch sử chuẩn bị chuyển cho Agent xử lý.
+- **Story 5.3 - Nhúng ngữ cảnh vào Agent (SynthesisAgent / LLMGenerator):**
+  - *Là* Cụ Rùa AI,
+  - *Tôi muốn* tổng hợp 5-10 cặp chat gần nhất vào System Prompt hoặc luồng hội thoại trước khi hỏi LLM,
+  - *Để* tôi không bị "mất trí nhớ" tạm thời và có thể trả lời trôi chảy các câu hỏi tiếp nối của học sinh.

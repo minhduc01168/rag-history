@@ -20,7 +20,20 @@ build/
 
 # Environment
 .env
-.env.local
+.env.*
+!.env.example
+!.env.local.example
+!.env.prod.example
+backend/.env
+backend/.env.*
+!backend/.env.example
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+tmp_env/
+test_output.txt
+backend/test_output.txt
+backend/test_*.py
 
 # OS
 .DS_Store
@@ -44,6 +57,7 @@ _bmad-output/
 .agents/
 
 # Data and Vector DB
+data/
 backend/.chroma/
 filtered_pdf/
 markdowns/

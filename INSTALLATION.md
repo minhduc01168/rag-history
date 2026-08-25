@@ -15,31 +15,39 @@ Tài liệu này hướng dẫn cài đặt và thiết lập môi trường ph�
 
 ---
 
-## 🛠️ 2. Cài Đặt Bằng Docker Compose (Nhanh Nhất)
+## 🛠️ 2. Khởi Động Bằng Docker (Khuyên Dùng)
 
-Đây là cách dễ dàng nhất để chạy toàn bộ hệ thống (Backend, Frontend, Vector DB) chỉ với 1 lệnh:
+Hệ thống đã tách biệt cấu hình cho 2 môi trường:
 
-1. **Clone mã nguồn về máy:**
-   ```bash
-   git clone https://github.com/your-repo/rag-history.git
-   cd rag-history
-   ```
-2. **Tạo file cấu hình môi trường `.env` (Tại thư mục gốc):**
-   ```bash
-   # Tạo file .env
-   cat <<EOF > .env
-   GEMINI_API_KEY=your_api_key_here_if_any
-   CHROMA_HOST=localhost
-   CHROMA_PORT=8000
-   EOF
-   ```
-3. **Khởi chạy Docker Compose:**
-   ```bash
-   docker-compose up --build -d
-   ```
-4. **Kiểm tra ứng dụng:**
-   - Sân chơi Lịch sử (Frontend): [http://localhost:5173](http://localhost:5173)
-   - Tài liệu API Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
+### 2.1. Chạy Môi trường Phát triển Local (Live Reload / HMR)
+Dành cho lập trình viên phát triển tính năng, sửa code phản hồi ngay lập tức:
+```bash
+# 1. Cấu hình biến môi trường dev
+cp .env.local.example backend/.env
+
+# 2. Khởi động Docker Local
+docker compose -f docker-compose.local.yml up --build -d
+
+# 3. Truy cập:
+# - Frontend: http://localhost:3000
+# - Backend Docs: http://localhost:8000/docs
+```
+
+### 2.2. Triển khai Môi trường Production (Deploy Server)
+Dành cho chạy chính thức trên máy chủ với Nginx hiệu năng cao, healthcheck, và restart policies:
+```bash
+# 1. Cấu hình biến môi trường prod
+cp .env.prod.example backend/.env
+
+# 2. Khởi động Docker Production
+docker compose -f docker-compose.prod.yml up --build -d
+
+# 3. Kiểm tra:
+docker compose -f docker-compose.prod.yml ps
+# Truy cập: http://localhost (Port 80)
+```
+*Chi tiết cấu hình nâng cao xem tại: [docs/DEPLOYMENT_GUIDE.md](file:///home/mypc/rag-history/docs/DEPLOYMENT_GUIDE.md)*
+
 
 ---
 

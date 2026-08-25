@@ -1,10 +1,10 @@
 {
-  "name": "Đại Việt Kids AI — Sân chơi Lịch sử & Địa lý",
+  "name": "Đại Việt Kids AI — Sân chơi Lịch sử Tiểu học",
   "short_name": "DaiVietKids",
-  "description": "Sân chơi Lịch sử & Địa lý Tiểu học thông minh cùng Cụ Rùa Thông Thái",
+  "description": "Sân chơi Lịch sử Tiểu học Lớp 4 & 5 thông minh cùng Cụ Rùa Thông Thái",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
+  "background_color": "#fffdf7",
   "theme_color": "#f59e0b",
   "orientation": "portrait-primary",
   "categories": ["education", "history", "kids"],

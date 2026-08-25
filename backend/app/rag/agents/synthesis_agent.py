@@ -6,6 +6,7 @@ from app.rag.agents.roleplay_agent import RoleplayAgent
 from app.rag.agents.quiz_agent import QuizAgent
 from app.rag.guardrails import ChildSafetyGuardrail
 
+
 class SynthesisAgent:
     """
     Master Orchestrator cho Đại Việt Kids AI:
@@ -21,7 +22,7 @@ class SynthesisAgent:
         self.roleplay_agent = RoleplayAgent(knowledge_agent=self.knowledge_agent, llm_generator=self.llm)
         self.quiz_agent = QuizAgent(knowledge_agent=self.knowledge_agent, llm_generator=self.llm)
 
-    def process_query(self, query: str) -> Dict[str, Any]:
+    def process_query(self, query: str, history: List[Dict[str, str]] = None) -> Dict[str, Any]:
         """
         Xử lý truy vấn lịch sử end-to-end cho học sinh tiểu học.
         """
@@ -47,13 +48,13 @@ class SynthesisAgent:
 
         # 3. Xử lý theo từng luồng
         if route == "roleplay":
-            res = self.roleplay_agent.process(query, target_character=character)
+            res = self.roleplay_agent.process(query, target_character=character, history=history)
             answer = res["answer"]
             sources = res["sources"]
             character_played = res["character_played"]
 
         elif route == "quiz":
-            res = self.quiz_agent.generate_quiz(query)
+            res = self.quiz_agent.generate_quiz(query, history=history)
             answer = res["answer"]
             sources = res["sources"]
             quiz_data = res["quiz_data"]
@@ -63,24 +64,56 @@ class SynthesisAgent:
             context = res.get("answer", "")
             sources = res.get("sources", [])
 
-            # Synthesize với persona Cụ Rùa Thông Thái
-            storyteller_prompt = (
-                f"Bạn là **Cụ Rùa Thông Thái**, một vị thần hiền từ, điềm đạm và am hiểu sâu sắc nghìn năm lịch sử Việt Nam.\n"
-                f"Nhiệm vụ của bạn là trả lời câu hỏi của một học sinh Tiểu học (Lớp 4 hoặc Lớp 5) dựa trên kiến thức Sách giáo khoa dưới đây.\n\n"
-                f"**Kiến thức SGK Lịch sử:**\n{context}\n\n"
-                f"**Câu hỏi của cháu:** \"{query}\"\n\n"
-                f"**QUY TẮC TRẢ LỜI NGHIÊM NGẶT:**\n"
-                f"1. Xưng là 'Cụ Rùa' và gọi bé là 'cháu' hoặc 'nhà sử học nhí'.\n"
-                f"2. Giọng điệu ấm áp, sinh động, tự hào dân tộc, như đang kể một câu chuyện truyền cảm hứng.\n"
-                f"3. Giới hạn độ dài: Ngắn gọn, dưới 180 từ, chia làm 2-3 đoạn ngắn.\n"
-                f"4. Bám sát dữ liệu SGK được cung cấp, không bịa đặt sử sách.\n"
-                f"5. LUÔN kết thúc câu trả lời bằng 1 câu hỏi gợi mở trí tò mò để khuyến khích bé khám phá tiếp."
-            )
-            try:
-                answer = self.llm._call_gemini(storyteller_prompt)
-            except Exception as e:
-                print(f"[SynthesisAgent] LLM Error: {e}")
-                answer = f"🐢 **Cụ Rùa Thông Thái:** Khà khà, câu hỏi \"{query}\" của cháu rất hay! Theo sách sử, {context[:200]}... Cháu muốn tìm hiểu thêm về nhân vật nào nữa không?"
+            # Kiểm tra context có đủ nội dung để trả lời không
+            if not context or len(context.strip()) < 30:
+                answer = (
+                    "🐢 **Cụ Rùa Thông Thái:** Khà khà, cháu ơi! Câu hỏi này rất thú vị, "
+                    "nhưng Cụ Rùa chưa tìm thấy thông tin trong sách giáo khoa Lịch sử Lớp 4 & 5 của chúng ta. "
+                    "Cháu thử hỏi về các bài học như Vua Hùng, Hai Bà Trưng, "
+                    "Ngô Quyền hay Chiến thắng Điện Biên Phủ xem sao nhé! 📚"
+                )
+            else:
+                history_str = ""
+                if history:
+                    history_str = "**Lịch sử trò chuyện gần đây:**\n"
+                    for h in history:
+                        r = "Học sinh" if h.get("role") == "user" else "Cụ Rùa"
+                        history_str += f"- {r}: {h.get('content')}\n"
+                    history_str += "\n"
+
+                # Synthesize với persona Cụ Rùa Thông Thái
+                storyteller_prompt = (
+                    f"Bạn là **Cụ Rùa Thông Thái**, một vị thần hiền từ, điềm đạm và am hiểu sâu sắc "
+                    f"nghìn năm Lịch sử Việt Nam.\n"
+                    f"Nhiệm vụ: Trả lời câu hỏi của học sinh Tiểu học (Lớp 4 hoặc Lớp 5) "
+                    f"dựa HOÀN TOÀN vào kiến thức SGK Lịch sử dưới đây.\n\n"
+                    f"{history_str}"
+                    f"**Kiến thức SGK Lịch sử Lớp 4 & 5 liên quan:**\n{context}\n\n"
+                    f"**Câu hỏi của học sinh:** \"{query}\"\n\n"
+                    f"**QUY TẮC TRẢ LỜI BẮT BUỘC:**\n"
+                    f"1. Xưng là 'Cụ Rùa' và gọi học sinh là 'cháu' hoặc 'nhà sử học nhí'.\n"
+                    f"2. Trả lời ĐI THẲNG vào câu hỏi — không mở đầu bằng lời khen ngợi câu hỏi quá dài.\n"
+                    f"3. Giọng điệu: Ấm áp, sinh động, tự hào dân tộc, như đang kể một câu chuyện cho trẻ em.\n"
+                    f"4. Độ dài: Ngắn gọn, dưới 150 từ, chia làm 2-3 đoạn ngắn.\n"
+                    f"5. Bám sát CHÍNH XÁC nội dung SGK được cung cấp ở trên. Không bịa đặt.\n"
+                    f"6. Nếu câu hỏi về Địa lý hoặc môn khác: Giải thích nhẹ nhàng rằng Cụ Rùa chuyên "
+                    f"về Lịch sử Lớp 4-5 và mời bé hỏi về các sự kiện, nhân vật lịch sử.\n"
+                    f"7. Kết thúc bằng đúng 1 câu hỏi gợi mở khuyến khích bé suy nghĩ thêm về bài học lịch sử.\n\n"
+                    f"**Câu trả lời của Cụ Rùa:**"
+                )
+                try:
+                    answer = self.llm._call_gemini(storyteller_prompt)
+                except Exception as e:
+                    print(f"[SynthesisAgent] LLM Error: {e}")
+                    # Fallback thông minh: làm sạch ký hiệu markdown (#, *, -) và lấy đoạn văn có nghĩa
+                    import re
+                    clean_ctx = re.sub(r'[#*\-_`]', '', context)
+                    clean_ctx = ' '.join(clean_ctx.split())
+                    context_short = " ".join(clean_ctx.split()[:50]).strip()
+                    answer = (
+                        f"Chào cháu nhà sử học nhí! Theo sách giáo khoa Lịch sử: {context_short}... "
+                        f"Cháu muốn Cụ Rùa kể tiếp câu chuyện này không?"
+                    )
 
         # 4. Kiểm tra an toàn đầu ra (Guardrails)
         safe_answer = ChildSafetyGuardrail.sanitize_output(answer)

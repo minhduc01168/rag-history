@@ -2,9 +2,15 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
+    container_name: daivietkids-frontend-dev
     ports:
-      - "3000:80"
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000
     depends_on:
       - backend
     networks:
@@ -14,6 +20,8 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    container_name: daivietkids-backend-dev
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
     ports:
       - "8000:8000"
     env_file:
@@ -27,14 +35,18 @@ services:
       - ./backend:/app
       - ./markdowns:/markdowns
     depends_on:
-      - postgres
-      - chromadb
-      - embedding_service
+      postgres:
+        condition: service_started
+      chromadb:
+        condition: service_started
+      embedding_service:
+        condition: service_started
     networks:
       - daivietkids-network
 
   postgres:
     image: postgis/postgis:15-3.4-alpine
+    container_name: daivietkids-postgres-dev
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -42,12 +54,13 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_dev_data:/var/lib/postgresql/data
     networks:
       - daivietkids-network
 
   chromadb:
     image: chromadb/chroma:latest
+    container_name: daivietkids-chroma-dev
     environment:
       - IS_PERSISTENT=TRUE
       - PERSIST_DIRECTORY=/data
@@ -63,6 +76,7 @@ services:
     build:
       context: ./embedding_service
       dockerfile: Dockerfile
+    container_name: daivietkids-embedding-dev
     environment:
       - EMBEDDING_MODEL_NAME=microsoft/harrier-oss-v1-0.6b
       - MAX_SEQ_LENGTH=512
@@ -76,7 +90,7 @@ services:
       - daivietkids-network
 
 volumes:
-  postgres_data:
+  postgres_dev_data:
 
 networks:
   daivietkids-network:

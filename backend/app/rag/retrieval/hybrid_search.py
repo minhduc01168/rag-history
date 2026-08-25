@@ -1,3 +1,4 @@
+import re
 from rank_bm25 import BM25Okapi
 
 class HybridSearcher:
@@ -9,16 +10,21 @@ class HybridSearcher:
         Khởi tạo BM25 index từ một list of documents.
         """
         self.documents = documents
-        # Tokenize cơ bản cho tiếng Việt (tách theo khoảng trắng)
-        tokenized_corpus = [doc.lower().split(" ") for doc in self.documents]
+        # Tokenize cơ bản cho tiếng Việt (loại bỏ dấu câu)
+        tokenized_corpus = [self._tokenize(doc) for doc in self.documents]
         self.bm25 = BM25Okapi(tokenized_corpus)
+
+    def _tokenize(self, text: str) -> list[str]:
+        # Bỏ dấu câu và tách từ
+        clean_text = re.sub(r'[^\w\s]', '', text.lower())
+        return clean_text.split()
 
     def keyword_search(self, query: str, top_k: int = 3) -> list[dict]:
         """
         Tìm kiếm BM25.
         Trả về danh sách dict chứa text và score.
         """
-        tokenized_query = query.lower().split(" ")
+        tokenized_query = self._tokenize(query)
         scores = self.bm25.get_scores(tokenized_query)
         
         # Sắp xếp top_k
@@ -41,6 +47,7 @@ class HybridSearcher:
         """
         # Khởi tạo dict để lưu RRF score cho từng text
         rrf_scores = {}
+        metadata_map = {}
         
         # Hàm helper xử lý list
         def add_to_rrf(results_list, weight=1.0):
@@ -48,6 +55,7 @@ class HybridSearcher:
                 text = item["text"]
                 if text not in rrf_scores:
                     rrf_scores[text] = 0.0
+                    metadata_map[text] = item.get("metadata", {})
                 rrf_scores[text] += weight * (1.0 / (k + rank + 1))
 
         add_to_rrf(bm25_results)
@@ -56,4 +64,4 @@ class HybridSearcher:
         # Sắp xếp theo score
         sorted_results = sorted(rrf_scores.items(), key=lambda x: x[1], reverse=True)
         
-        return [{"text": text, "rrf_score": score} for text, score in sorted_results]
+        return [{"text": text, "rrf_score": score, "metadata": metadata_map[text]} for text, score in sorted_results]

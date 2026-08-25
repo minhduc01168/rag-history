@@ -13,7 +13,7 @@ class QuizAgent:
         self.knowledge_agent = knowledge_agent or KnowledgeAgent()
         self.llm = llm_generator or LLMGenerator(mock=False)
 
-    def generate_quiz(self, topic_or_query: str) -> Dict[str, Any]:
+    def generate_quiz(self, topic_or_query: str, history: List[Dict[str, str]] = None) -> Dict[str, Any]:
         """
         Sinh ra 1 câu hỏi trắc nghiệm (3 đáp án A, B, C) kèm đáp án đúng và giải thích ngắn gọn.
         """
@@ -23,8 +23,17 @@ class QuizAgent:
         sources = retrieval_result.get("sources", [])
 
         # 2. Prompt yêu cầu Gemini trả về JSON chuẩn
+        history_str = ""
+        if history:
+            history_str = "**Lịch sử trò chuyện gần đây:**\n"
+            for h in history:
+                r = "Học sinh" if h.get("role") == "user" else "Cụ Rùa"
+                history_str += f"- {r}: {h.get('content')}\n"
+            history_str += "\n"
+
         quiz_prompt = (
             f"Bạn là Cụ Rùa Thông Thái đang đố vui lịch sử cho học sinh Tiểu học (Lớp 4, Lớp 5).\n\n"
+            f"{history_str}"
             f"**Ngữ cảnh kiến thức SGK:**\n{context}\n\n"
             f"**Chủ đề yêu cầu:** \"{topic_or_query}\"\n\n"
             f"**NHIỆM VỤ:** Hãy tạo ra 1 câu hỏi trắc nghiệm lịch sử thú vị, dễ hiểu dành cho trẻ em.\n"

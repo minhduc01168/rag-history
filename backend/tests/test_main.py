@@ -22,10 +22,11 @@ def test_health_check():
 # ==================== RAG Tests ====================
 
 def test_chat():
-    response = client.post(
-        "/api/v1/rag/chat",
-        json={"query": "Xin chào"},
-    )
+    with TestClient(app) as client_ctx:
+        response = client_ctx.post(
+            "/api/v1/rag/chat",
+            json={"query": "Xin chào"},
+        )
     assert response.status_code == 200
     data = response.json()
     assert "answer" in data
@@ -33,8 +34,9 @@ def test_chat():
     assert "sources" in data
 
 def test_chat_empty_query():
-    response = client.post(
-        "/api/v1/rag/chat",
-        json={"query": "   "},
-    )
+    with TestClient(app) as client_ctx:
+        response = client_ctx.post(
+            "/api/v1/rag/chat",
+            json={"query": "   "},
+        )
     assert response.status_code == 400

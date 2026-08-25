@@ -10,9 +10,11 @@ from contextlib import asynccontextmanager
 from concurrent.futures import ThreadPoolExecutor
 from app.db.session import engine, Base, SessionLocal
 from app.models.user import UserRole
+from app.models.chat import ChatSession, ChatMessage
 from app.crud.crud_user import get_user_by_email, create_user
 from app.schemas.user import UserCreate
 from app.rag.retrieval.reranker import Reranker
+from app.rag.agents.synthesis_agent import SynthesisAgent
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -46,6 +48,14 @@ async def lifespan(app: FastAPI):
             print("Admin user created successfully.")
     finally:
         db.close()
+
+    # ── 2. Seed Sample History Knowledge Base nếu ChromaDB rỗng ──
+    from app.rag.ingestion.seeder import seed_sample_history_data_if_empty
+    seed_sample_history_data_if_empty()
+    
+    # ── 3. Khởi tạo SynthesisAgent sau khi seed dữ liệu ──
+    print("[Startup] Khởi tạo SynthesisAgent...")
+    app.state.synthesis_agent = SynthesisAgent(llm_mock=False)
     
     yield
     # Cleanup on shutdown if needed

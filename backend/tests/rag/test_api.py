@@ -1,9 +1,33 @@
 from fastapi.testclient import TestClient
 from app.api.rag_router import router
 from fastapi import FastAPI
+from app.db.session import get_db
 
 app = FastAPI()
 app.include_router(router)
+
+class MockAgent:
+    def process_query(self, query: str, history: list = None):
+        if "chém giết dã man" in query.lower():
+            return {
+                "query": query,
+                "route_taken": "guardrail_blocked",
+                "answer": "Câu hỏi không phù hợp, Cụ Rùa xin từ chối.",
+                "sources": []
+            }
+        return {
+            "query": query,
+            "route_taken": "knowledge",
+            "answer": "Answer here",
+            "sources": ["Source 1"]
+        }
+
+app.state.synthesis_agent = MockAgent()
+
+def override_get_db():
+    yield None
+
+app.dependency_overrides[get_db] = override_get_db
 
 client = TestClient(app)
 
