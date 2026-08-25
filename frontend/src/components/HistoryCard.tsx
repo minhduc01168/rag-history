@@ -96,7 +96,7 @@ export function HistoryCard({ period, onExploreMore }: HistoryCardProps) {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  onExploreMore && onExploreMore(period);
+                  if (onExploreMore) onExploreMore(period);
                 }}
                 className="px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black rounded-xl text-xs transition-all shadow-md shadow-amber-500/20 hover:scale-105"
               >

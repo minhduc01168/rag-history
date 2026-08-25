@@ -36,8 +36,8 @@ export function RegisterPage() {
 
       setSuccess(true);
       setTimeout(() => navigate('/login'), 2000);
-    } catch (err: any) {
-      setError(err.message || 'Có lỗi xảy ra khi đăng ký');
+    } catch (err) {
+      setError((err as Error).message || 'Có lỗi xảy ra khi đăng ký');
     } finally {
       setLoading(false);
     }

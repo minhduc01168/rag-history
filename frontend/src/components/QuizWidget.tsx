@@ -38,7 +38,7 @@ export function QuizWidget({ quiz, onNextQuiz }: QuizWidgetProps) {
   const handleReset = () => {
     setSelectedOption(null);
     setIsAnswered(false);
-    onNextQuiz && onNextQuiz();
+    if (onNextQuiz) onNextQuiz();
   };
 
   const isCorrect = selectedOption && currentQuiz.correct_answer.startsWith(selectedOption[0]);

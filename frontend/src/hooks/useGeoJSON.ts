@@ -6,13 +6,13 @@ interface GeoJSONFeature {
     type: string;
     coordinates: number[] | number[][] | number[][][];
   };
-  properties: Record<string, any>;
+  properties: Record<string, string | number | boolean | null>;
 }
 
 interface GeoJSONData {
   type: string;
   features: GeoJSONFeature[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, string | number | boolean | null>;
 }
 
 interface UseGeoJSONReturn {

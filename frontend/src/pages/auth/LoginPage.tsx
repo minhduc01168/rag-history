@@ -48,8 +48,8 @@ export function LoginPage() {
       const userData = await userResponse.json();
       login(data.access_token, userData);
       navigate(from, { replace: true });
-    } catch (err: any) {
-      setError(err.message || 'Có lỗi xảy ra khi đăng nhập');
+    } catch (err) {
+      setError((err as Error).message || 'Có lỗi xảy ra khi đăng nhập');
     } finally {
       setLoading(false);
     }

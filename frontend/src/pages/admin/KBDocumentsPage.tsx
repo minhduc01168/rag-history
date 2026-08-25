@@ -13,7 +13,7 @@ interface DocumentInfo {
 interface ChunkData {
   id?: string;
   text: string;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 import { API_BASE_URL } from '../../config/api';
@@ -69,7 +69,7 @@ function ChunkPanel({ filename, chunks, loading, onClose }: ChunkPanelProps) {
   const toggle = (i: number) =>
     setExpanded(prev => {
       const s = new Set(prev);
-      s.has(i) ? s.delete(i) : s.add(i);
+      if (s.has(i)) { s.delete(i); } else { s.add(i); }
       return s;
     });
 
@@ -213,8 +213,8 @@ export function KBDocumentsPage() {
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setDocs(await res.json());
-    } catch (e: any) {
-      setError(e.message ?? 'Không thể tải danh sách tài liệu.');
+    } catch (e) {
+      setError((e as Error).message ?? 'Không thể tải danh sách tài liệu.');
     } finally {
       setLoadingDocs(false);
     }
@@ -234,7 +234,7 @@ export function KBDocumentsPage() {
       );
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setChunks(await res.json());
-    } catch (e: any) {
+    } catch {
       setChunks([]);
     } finally {
       setLoadingChunks(false);
@@ -253,8 +253,8 @@ export function KBDocumentsPage() {
       setDocs(prev => prev.filter(d => d.filename !== filename));
       if (selectedFile === filename) setSelectedFile(null);
       setConfirmDelete(null);
-    } catch (e: any) {
-      setError(e.message ?? 'Xóa thất bại.');
+    } catch (e) {
+      setError((e as Error).message ?? 'Xóa thất bại.');
     } finally {
       setDeleting(null);
     }

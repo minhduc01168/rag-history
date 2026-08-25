@@ -20,10 +20,10 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // Helper function to access nested translation keys like 'nav.home' or 'weather.currentTemp'
   const t = (path: string): string => {
     const keys = path.split('.');
-    let current: any = translations[lang];
+    let current: unknown = translations[lang];
     for (const key of keys) {
       if (current && typeof current === 'object' && key in current) {
-        current = current[key];
+        current = (current as Record<string, unknown>)[key];
       } else {
         return path; // Fallback to key name if not found
       }
@@ -38,6 +38,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useLanguage = (): LanguageContextType => {
   const context = useContext(LanguageContext);
   if (!context) {

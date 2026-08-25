@@ -4,7 +4,7 @@ import { API_BASE_URL } from '../../config/api';
 
 interface ChunkData {
   text: string;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 export function KnowledgeBasePage() {
@@ -51,8 +51,8 @@ export function KnowledgeBasePage() {
 
       const data = await response.json();
       setChunks(data);
-    } catch (err: any) {
-      setError(err.message || 'Đã có lỗi xảy ra');
+    } catch (err) {
+      setError((err as Error).message || 'Đã có lỗi xảy ra');
     } finally {
       setLoading(false);
     }
@@ -82,8 +82,8 @@ export function KnowledgeBasePage() {
       setChunks(null);
       setFile(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
-    } catch (err: any) {
-      setError(err.message || 'Đã có lỗi xảy ra');
+    } catch (err) {
+      setError((err as Error).message || 'Đã có lỗi xảy ra');
     } finally {
       setCommitting(false);
     }

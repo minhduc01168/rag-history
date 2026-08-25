@@ -41,6 +41,7 @@ export function ChatWindow() {
         ...prev.slice(1),
       ]);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [t]);
 
   const scrollToBottom = () => {
@@ -90,8 +91,8 @@ export function ChatWindow() {
       };
 
       setMessages((prev) => [...prev, botMessage]);
-    } catch (error) {
-      // Add error message
+    } catch {
+      // Network or server error
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: t('bot.errorMsg'),
