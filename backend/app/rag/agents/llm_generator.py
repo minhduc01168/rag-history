@@ -12,7 +12,7 @@ class LLMGenerator:
     def __init__(self, model_name: str = "gemini-flash-latest", mock: bool = False):
         self.mock = mock
         self.model_name = model_name
-        self.candidate_models = ["gemini-flash-latest", "gemini-3.7-flash", "gemini-3.5-flash", "gemini-2.5-flash"]
+        self.candidate_models = ["gemini-2.5-flash", "gemini-flash-latest", "gemini-3.7-flash", "gemini-3.5-flash"]
         if not self.mock:
             api_key = os.environ.get("GEMINI_API_KEY", "")
             if not api_key:

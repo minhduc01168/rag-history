@@ -49,11 +49,7 @@ async def lifespan(app: FastAPI):
     finally:
         db.close()
 
-    # ── 2. Seed Sample History Knowledge Base nếu ChromaDB rỗng ──
-    from app.rag.ingestion.seeder import seed_sample_history_data_if_empty
-    seed_sample_history_data_if_empty()
-    
-    # ── 3. Khởi tạo SynthesisAgent sau khi seed dữ liệu ──
+    # ── 2. Khởi tạo SynthesisAgent ──
     print("[Startup] Khởi tạo SynthesisAgent...")
     app.state.synthesis_agent = SynthesisAgent(llm_mock=False)
     

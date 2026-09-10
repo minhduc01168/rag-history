@@ -13,6 +13,21 @@ interface Message {
   sources?: string[];
 }
 
+function generateSafeUUID(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    try {
+      return crypto.randomUUID();
+    } catch {
+      // Ignore and fallback
+    }
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 export function ChatWindow() {
   const { t } = useLanguage();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -22,7 +37,7 @@ export function ChatWindow() {
   const [sessionId] = useState<string>(() => {
     let sid = localStorage.getItem('chat_session_id');
     if (!sid) {
-      sid = crypto.randomUUID();
+      sid = generateSafeUUID();
       localStorage.setItem('chat_session_id', sid);
     }
     return sid;

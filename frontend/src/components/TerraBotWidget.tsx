@@ -1,5 +1,47 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Component, ErrorInfo, ReactNode } from 'react';
 import { ChatWindow } from './chat/ChatWindow';
+
+interface ErrorBoundaryProps {
+  children: ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
+
+class ChatErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(): ErrorBoundaryState {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('ChatWidget error caught:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+          <span className="text-4xl mb-2">🐢</span>
+          <p className="text-amber-900 font-bold mb-1 text-sm">Cụ Rùa đang nghỉ ngơi một chút</p>
+          <p className="text-xs text-slate-500 mb-4">Đã xảy ra sự cố khi tải giao diện chat.</p>
+          <button
+            onClick={() => this.setState({ hasError: false })}
+            className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-colors shadow-sm"
+          >
+            Thử lại
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 type ChatMode = 'normal' | 'expanded';
 
@@ -194,7 +236,9 @@ export function TerraBotWidget() {
             onNewChat={handleNewChat}
           />
           <div className="flex-1 overflow-hidden bg-gradient-to-b from-amber-50/50 via-white to-amber-50/30">
-            <ChatWindow key={sessionKey} />
+            <ChatErrorBoundary>
+              <ChatWindow key={sessionKey} />
+            </ChatErrorBoundary>
           </div>
         </div>
       )}

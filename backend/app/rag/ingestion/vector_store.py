@@ -6,7 +6,7 @@ import requests
 from chromadb import Documents, EmbeddingFunction, Embeddings
 
 class CustomHTTPEmbeddingFunction(EmbeddingFunction):
-    def __init__(self, api_url: str, timeout: int = 5):
+    def __init__(self, api_url: str, timeout: int = 60):
         self.api_url = api_url
         self.timeout = timeout
 
@@ -29,9 +29,9 @@ class CustomHTTPEmbeddingFunction(EmbeddingFunction):
             import hashlib
             mock_vecs = []
             for t in input:
-                vec = [0.0] * 640
+                vec = [0.0] * 1024
                 for w in t.lower().split():
-                    idx = int(hashlib.md5(w.encode('utf-8')).hexdigest(), 16) % 640
+                    idx = int(hashlib.md5(w.encode('utf-8')).hexdigest(), 16) % 1024
                     vec[idx] += 1.0
                 mock_vecs.append(vec)
             return mock_vecs

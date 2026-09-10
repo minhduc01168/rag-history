@@ -24,7 +24,7 @@ class QueryResponse(BaseModel):
     character_played: Optional[str] = None
 
 @router.post("/chat", response_model=QueryResponse)
-async def chat_with_agent(request: QueryRequest, req: Request, db: Session = Depends(get_db)):
+def chat_with_agent(request: QueryRequest, req: Request, db: Session = Depends(get_db)):
     """
     Endpoint chính để trò chuyện với Lumos History Bot.
     """

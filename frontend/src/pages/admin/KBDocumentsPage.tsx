@@ -142,8 +142,8 @@ function ChunkPanel({ filename, chunks, loading, onClose }: ChunkPanelProps) {
                           </p>
                           <p className="text-[11px] font-semibold text-slate-500 mt-0.5">
                             ~{tokenEst} tokens · {charCount} ký tự
-                            {chunk.metadata?.['Header 1'] && (
-                              <span className="ml-2 text-amber-900 font-bold">§ {chunk.metadata['Header 1']}</span>
+                            {Boolean(chunk.metadata?.['Header 1']) && (
+                              <span className="ml-2 text-amber-900 font-bold">§ {String(chunk.metadata['Header 1'])}</span>
                             )}
                           </p>
                         </div>
