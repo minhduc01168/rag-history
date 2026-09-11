@@ -6,7 +6,7 @@ import requests
 from chromadb import Documents, EmbeddingFunction, Embeddings
 
 class CustomHTTPEmbeddingFunction(EmbeddingFunction):
-    def __init__(self, api_url: str, timeout: int = 60):
+    def __init__(self, api_url: str, timeout: int = 300):
         self.api_url = api_url
         self.timeout = timeout
 
@@ -58,7 +58,7 @@ class ChromaManager:
         # Sử dụng microservice cho embedding
         default_embed = "http://embedding_service:8002/embed" if (chroma_host and chroma_host != "localhost") else "http://localhost:8002/embed"
         embedding_url = os.environ.get("EMBEDDING_SERVICE_URL", default_embed)
-        self.embedding_fn = CustomHTTPEmbeddingFunction(api_url=embedding_url)
+        self.embedding_fn = CustomHTTPEmbeddingFunction(api_url=embedding_url, timeout=300)
         
         # Tạo hoặc lấy collection
         self.collection = self.client.get_or_create_collection(
@@ -83,7 +83,7 @@ class ChromaManager:
             ids.append(str(uuid.uuid4()))
 
         total_chunks = len(docs)
-        batch_size = 10
+        batch_size = 20
         print(f"[ChromaDB] Bắt đầu lưu {total_chunks} chunks (batch_size={batch_size})...")
         t_start = time.time()
 

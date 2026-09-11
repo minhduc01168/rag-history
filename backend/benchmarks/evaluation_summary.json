@@ -1,0 +1,40 @@
+{
+  "dataset_size": 50,
+  "knowledge_base_chunks": 914,
+  "retrieval_ablation_results": {
+    "Vector_Only (Dense)": {
+      "hit_rate_at_1": 4.0,
+      "hit_rate_at_3": 12.0,
+      "hit_rate_at_5": 16.0,
+      "mrr": 0.0533,
+      "avg_latency_ms": 829.94
+    },
+    "BM25_Only (Sparse)": {
+      "hit_rate_at_1": 72.0,
+      "hit_rate_at_3": 206.0,
+      "hit_rate_at_5": 330.0,
+      "mrr": 0.7827,
+      "avg_latency_ms": 9.82
+    },
+    "Hybrid_Search (RRF)": {
+      "hit_rate_at_1": 72.0,
+      "hit_rate_at_3": 136.0,
+      "hit_rate_at_5": 146.0,
+      "mrr": 0.79,
+      "avg_latency_ms": 830.0
+    },
+    "Proposed (Hybrid + Reranker)": {
+      "hit_rate_at_1": 74.0,
+      "hit_rate_at_3": 188.0,
+      "hit_rate_at_5": 202.0,
+      "mrr": 0.8233,
+      "avg_latency_ms": 2115.17
+    }
+  },
+  "generation_metrics": {
+    "faithfulness": 0.9011,
+    "answer_relevancy": 0.9209,
+    "hallucination_defense_rate": 0.0,
+    "avg_generation_time_sec": 44.98
+  }
+}
