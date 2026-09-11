@@ -19,78 +19,98 @@ os.makedirs("paper_figures", exist_ok=True)
 # FIGURE 1: System Architecture Diagram (High-level dataflow)
 # ==============================================================================
 def generate_figure_1():
-    fig, ax = plt.subplots(figsize=(12, 6.5), dpi=300)
+    fig, ax = plt.subplots(figsize=(14, 8.2), dpi=300)
     ax.axis('off')
 
     # Color palette (Academic clean)
-    c_input = "#E0F2FE"     # Light blue
+    c_input = "#E0F2FE"     # Light sky blue
     c_guard = "#FEE2E2"     # Light red/pink
     c_router = "#FEF3C7"    # Light amber
-    c_retrieval = "#E0E7FF" # Light indigo
+    c_retrieval = "#EEF2FF" # Light indigo
     c_rerank = "#EDE9FE"    # Light purple
-    c_agent = "#DCFCE7"     # Light green
-    c_border = "#334155"
+    c_agent = "#DCFCE7"     # Light emerald green
+    c_output = "#F0FDF4"    # Crisp mint green
+    c_special = "#FDF4FF"   # Light fuchsia
 
-    def draw_box(x, y, w, h, title, subtitle="", color="#FFFFFF", corner=0.08):
-        rect = patches.FancyBboxPatch((x, y), w, h, boxstyle=f"round,pad=0.02,rounding_size={corner}",
-                                      ec=c_border, fc=color, lw=1.5, zorder=2)
+    def draw_box(x, y, w, h, title, subtitle="", color="#FFFFFF", border_color="#334155", corner=0.04, title_color="#0F172A"):
+        rect = patches.FancyBboxPatch((x, y), w, h, boxstyle=f"round,pad=0.015,rounding_size={corner}",
+                                      ec=border_color, fc=color, lw=1.6, zorder=2)
         ax.add_patch(rect)
         if subtitle:
-            ax.text(x + w/2, y + h*0.62, title, ha='center', va='center', fontweight='bold', fontsize=10.5, color="#0F172A", zorder=3)
-            ax.text(x + w/2, y + h*0.30, subtitle, ha='center', va='center', fontsize=8.5, color="#475569", zorder=3)
+            ax.text(x + w/2, y + h*0.68, title, ha='center', va='center', fontweight='bold', fontsize=10.5, color=title_color, zorder=3)
+            ax.text(x + w/2, y + h*0.32, subtitle, ha='center', va='center', fontsize=8.2, color="#334155", linespacing=1.2, zorder=3)
         else:
-            ax.text(x + w/2, y + h/2, title, ha='center', va='center', fontweight='bold', fontsize=10.5, color="#0F172A", zorder=3)
+            ax.text(x + w/2, y + h/2, title, ha='center', va='center', fontweight='bold', fontsize=10.5, color=title_color, zorder=3)
 
-    def draw_arrow(x1, y1, x2, y2, label=""):
+    def draw_arrow(x1, y1, x2, y2, label="", label_pos="top", color="#1E293B"):
         ax.annotate('', xy=(x2, y2), xytext=(x1, y1),
-                    arrowprops=dict(arrowstyle="->", color="#1E293B", lw=1.8, shrinkA=4, shrinkB=4), zorder=4)
+                    arrowprops=dict(arrowstyle="-|>", color=color, lw=1.8, shrinkA=3, shrinkB=3, mutation_scale=14), zorder=4)
         if label:
-            ax.text((x1+x2)/2, (y1+y2)/2 + 0.03, label, ha='center', va='bottom', fontsize=8, fontweight='bold', color="#0284C7", zorder=5)
+            mid_x, mid_y = (x1 + x2)/2, (y1 + y2)/2
+            offset_y = 0.025 if label_pos == "top" else -0.025
+            ax.text(mid_x, mid_y + offset_y, label, ha='center', va='center', fontsize=8, fontweight='bold',
+                    color="#4338CA", zorder=5, bbox=dict(boxstyle="round,pad=0.2", fc="#FFFFFF", ec="#CBD5E1", lw=0.6, alpha=0.9))
 
-    # 1. Input Box
-    draw_box(0.02, 0.40, 0.16, 0.20, "Student Query", "Lớp 4 & 5 Student\n(Text / Voice)", c_input)
+    # --- TOP BRANCH: Specialized Interactive Agents ---
+    draw_box(0.33, 0.88, 0.28, 0.08, "Interactive Agents (Quiz & Roleplay)", "Hero Personas (Tran Hung Dao, Quang Trung)", c_special, "#C084FC", title_color="#6B21A8")
 
-    # 2. Child Safety Guardrail
-    draw_box(0.22, 0.40, 0.16, 0.20, "Safety Guardrail", "Regex, PII Scrubbing,\nToxicity Filter", c_guard)
-    draw_arrow(0.18, 0.50, 0.22, 0.50)
+    # --- ROW 1: Input -> Safety -> Router ---
+    # 1. Student Query Box
+    draw_box(0.02, 0.62, 0.14, 0.19, "Student Query", "Grade 4 & 5 Student\nHistorical Question\n(Voice / Text)", c_input, "#0284C7", title_color="#0369A1")
 
-    # 3. Router Agent
-    draw_box(0.42, 0.40, 0.15, 0.20, "Router Agent", "Intent Classifier\n(Knowledge/Quiz/Role)", c_router)
-    draw_arrow(0.38, 0.50, 0.42, 0.50, "Safe")
+    # 2. Child Safety Guardrail Box
+    draw_box(0.20, 0.62, 0.14, 0.19, "Safety Guardrail", "Input Sanitization,\nPII Scrubbing,\nToxicity Filter", c_guard, "#EF4444", title_color="#B91C1C")
+    draw_arrow(0.16, 0.715, 0.20, 0.715)
 
-    # 4. Hybrid Retrieval Box (Large container)
-    retrieval_bg = patches.FancyBboxPatch((0.61, 0.12), 0.18, 0.76, boxstyle="round,pad=0.02,rounding_size=0.05",
+    # 3. Router Agent Box
+    draw_box(0.38, 0.62, 0.14, 0.19, "Router Agent", "Intent Classification\n(Knowledge vs.\nRoleplay / Quiz)", c_router, "#F59E0B", title_color="#B45309")
+    draw_arrow(0.34, 0.715, 0.38, 0.715, "Safe Query")
+
+    # Arrow from Router to Specialized Agents (Upward)
+    draw_arrow(0.45, 0.81, 0.45, 0.88, "Specialized", "top")
+
+    # --- HYBRID RETRIEVAL SUBSYSTEM (CONTAINER) ---
+    retrieval_bg = patches.FancyBboxPatch((0.56, 0.38), 0.41, 0.48, boxstyle="round,pad=0.02,rounding_size=0.03",
                                          ec="#6366F1", fc=c_retrieval, lw=1.5, linestyle='--', zorder=1)
     ax.add_patch(retrieval_bg)
-    ax.text(0.70, 0.84, "Hybrid Retrieval", ha='center', va='center', fontweight='bold', fontsize=10, color="#4338CA")
+    ax.text(0.765, 0.835, "Dual-Stage Hybrid Retrieval Engine", ha='center', va='center', fontweight='bold', fontsize=11, color="#3730A3")
 
-    # Inner components
-    draw_box(0.625, 0.58, 0.15, 0.18, "BM25 Sparse", "Lexical Keyword\n914 chunks", "#FFFFFF")
-    draw_box(0.625, 0.32, 0.15, 0.18, "Dense Vector", "Harrier 1024-d\nCosine Sim", "#FFFFFF")
-    draw_box(0.625, 0.14, 0.15, 0.12, "RRF Fusion", "k=60 (Top-15)", "#FEF08A")
+    # Arrow from Router to Retrieval Engine
+    draw_arrow(0.52, 0.715, 0.58, 0.715, "History Query")
 
-    draw_arrow(0.57, 0.54, 0.625, 0.67)
-    draw_arrow(0.57, 0.46, 0.625, 0.41)
-    draw_arrow(0.70, 0.58, 0.70, 0.26)
-    draw_arrow(0.70, 0.32, 0.70, 0.26)
+    # Inner Box A: BM25 Lexical Index (Left)
+    draw_box(0.58, 0.63, 0.17, 0.16, "BM25 Sparse Index", "Exact Keyword Search\n914 Chunks Corpus", "#FFFFFF", "#4F46E5", title_color="#3730A3")
 
-    # 5. Cross-Encoder Reranker
-    draw_box(0.83, 0.40, 0.15, 0.20, "Cross-Encoder", "ms-marco-MiniLM\nRerank -> Top 5", c_rerank)
-    draw_arrow(0.775, 0.20, 0.83, 0.45, "Top 15")
+    # Inner Box B: Dense Vector Search (Right)
+    draw_box(0.78, 0.63, 0.17, 0.16, "Dense Vector Search", "Harrier 1024-dim\nSemantic Cosine Sim", "#FFFFFF", "#4F46E5", title_color="#3730A3")
 
-    # 6. Synthesis Agent (Persona Cụ Rùa)
-    draw_box(0.42, 0.05, 0.36, 0.18, "Synthesis Agent (Persona Cụ Rùa)", "Pedagogical Storytelling Prompting + Grounded LLM Generation", c_agent)
-    draw_arrow(0.88, 0.40, 0.78, 0.14, "Top-5 Contexts")
+    # Arrow branching inside Retrieval Engine
+    draw_arrow(0.56, 0.715, 0.58, 0.715)
+    ax.plot([0.57, 0.57, 0.78], [0.715, 0.715, 0.715], color="#1E293B", lw=1.8, zorder=4)
 
-    # Output Arrow back to user
-    draw_arrow(0.42, 0.14, 0.10, 0.14)
-    draw_box(0.02, 0.05, 0.16, 0.18, "Pedagogical Output", "Sanitized Fact\nWarm & Engaging", "#F1F5F9")
+    # Inner Box C: Reciprocal Rank Fusion (RRF)
+    draw_box(0.64, 0.42, 0.25, 0.14, "Reciprocal Rank Fusion (RRF)", "Score = Sum 1/(k + Rank), k=60\nMerged Top-15 Candidate Passages", "#FEF08A", "#CA8A04", title_color="#854D0E")
 
-    # Branching for Roleplay / Quiz
-    draw_box(0.42, 0.75, 0.15, 0.18, "Quiz / Roleplay", "Interactive Mode\nHero Personas", "#FDF4FF")
-    draw_arrow(0.495, 0.60, 0.495, 0.75, "Specialized")
+    # Arrows from BM25 and Dense down to RRF
+    draw_arrow(0.665, 0.63, 0.71, 0.56, "Rank_BM25", "top")
+    draw_arrow(0.865, 0.63, 0.82, 0.56, "Rank_Dense", "top")
 
-    plt.title("Figure 1: End-to-End Architecture of the Dai Viet Kids Agentic RAG Framework", pad=15, fontweight='bold', color="#0F172A")
+    # --- STAGE 3: Cross-Encoder Neural Reranker ---
+    draw_box(0.64, 0.18, 0.25, 0.15, "Cross-Encoder Reranker", "ms-marco-MiniLM-L-6-v2\nFull Cross-Attention Scoring\n-> Select Top-5 Grounded Contexts", c_rerank, "#7C3AED", title_color="#5B21B6")
+    draw_arrow(0.765, 0.42, 0.765, 0.33, "Top-15 Candidates", "top")
+
+    # --- ROW 2 (Bottom): Multi-Agent Synthesis & Final Output ---
+    # 4. Synthesis Agent ("Cụ Rùa Thông Thái")
+    draw_box(0.25, 0.16, 0.32, 0.22, "Synthesis Agent (\"Cụ Rùa Thông Thái\")", "Pedagogical Storytelling Persona Prompting\n+ Factual Grounded Generation (Gemini LLM)\n+ Output Guardrails & Open Inquiry Question", c_agent, "#16A34A", title_color="#15803D")
+
+    # Arrow from Cross-Encoder to Synthesis Agent (Horizontal left)
+    draw_arrow(0.64, 0.255, 0.57, 0.255, "Top-5 Contexts")
+
+    # 5. Pedagogical Response Output Box
+    draw_box(0.02, 0.16, 0.17, 0.22, "Pedagogical Output", "Sanitized Historical Facts\nWarm & Engaging Tone\n< 150 words response\n100% Curriculum Grounded", c_output, "#059669", title_color="#047857")
+    draw_arrow(0.25, 0.27, 0.19, 0.27, "Sanitized Answer")
+
+    plt.title("Figure 1: End-to-End Architecture of the Dai Viet Kids Agentic RAG Framework", pad=20, fontweight='bold', fontsize=13, color="#0F172A")
     plt.tight_layout()
     output_path = "paper_figures/fig1_system_architecture.png"
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
